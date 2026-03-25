@@ -1,8 +1,7 @@
-# wrangler.toml
 name = "rays-portfolio"
+main = "worker/index.js"  
 compatibility_date = "2024-01-01"
 
-# Serve static files from the built dist/ folder
 [assets]
 directory = "./dist"
-binding = "ASSETS"
+binding = "ASSETS"       
