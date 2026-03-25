@@ -28,9 +28,10 @@ export const ABOUT_ME =
 export const GITHUB_USERNAME = "hopelesscaffeineaddict";
 export const QUOTE = "Security Analyst, Gamer, and CS Student";
 
-export const NAV_LINKS: Array<{ title: string; href?: string; target?: string }> = [
+export const NAV_LINKS: Array<{ title: string; href?: string; target?: string; rel?: string }> = [
   { title: "Blog" },
-  { title: "Github", href: "//github.com/" + GITHUB_USERNAME, target: "_blank" },
+  { title: "Linkedin", href: "https://www.linkedin.com/in/ray-goh-l33t/", target: "_blank", rel: "noopener noreferrer" },
+  { title: "Github", href: "//github.com/" + GITHUB_USERNAME, target: "_blank", rel: "noopener noreferrer" },
   { title: "Email", href: "mailto:rayneorshine03@gmail.com" },
-  { title: "Resume", href: "/resume.pdf", target: "_blank" } 
+  { title: "Resume", href: "resume.pdf", target: "_blank", rel: "noopener noreferrer" },
 ];
