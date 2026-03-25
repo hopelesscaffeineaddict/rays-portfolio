@@ -1,0 +1,7 @@
+# wrangler.toml
+name = "rays-portfolio"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# If your Worker code is in a different location, update the "main" path
+# Example: main = "worker/index.js" or main = "index.js"

@@ -4,10 +4,9 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 
-// https://astro.build/config
 export default defineConfig({
-  output: "static",
-  site: "https://token-template.deno.dev",
+  output: "static",   
+  site: "https://rays-portfolio.rayneorshine03.workers.dev",   
   integrations: [mdx(), sitemap(), tailwind()],
   markdown: {
     shikiConfig: {
