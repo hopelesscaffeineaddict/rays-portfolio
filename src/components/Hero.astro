@@ -7,23 +7,23 @@ import { QUOTE, SITE_TITLE } from "@/consts";
 <div class="hero-bg hidden md:block h-screen hero-bg-animate absolute top-0"></div>
 
 <section
-  class="h-screen !z-[20] relative w-full grid grid-cols-1 sm:grid-cols-2 gap-4 items-center"
+  class="h-screen !z-[20] relative w-full flex flex-col md:flex-row items-center gap-4"
   id="hero"
 >
-  <div class="grid place-items-center">
-    <div class="text-center -mt-10">
-      <!-- Typewriter Animation -->
+  <!-- Left: Text -->
+  <div class="w-full md:w-1/2 grid place-items-center px-4">
+    <div class="text-center">
       <h1 class="typewriter text-5xl sm:text-6xl md:text-7xl font-bold text-white mx-auto">
         &lt;{SITE_TITLE} /&gt;
       </h1>
-
-      <h2 class="text-lg sm:text-xl md:text-2xl mt-2 opacity-95 break-words">
+      <h2 class="text-lg sm:text-xl md:text-2xl mt-2 opacity-95 break-words text-center">
         {QUOTE}
       </h2>
     </div>
   </div>
 
-  <div>
+  <!-- Right: Image -->
+  <div class="w-full md:w-1/2 px-4">
     <Image
       alt="Hero"
       src={HeroImg}
@@ -66,5 +66,16 @@ import { QUOTE, SITE_TITLE } from "@/consts";
 @keyframes blink-caret {
   from, to { border-color: transparent }
   50% { border-color: #00ff00; }
+}
+</style>
+
+<style>
+h2 {
+  opacity: 0;
+  animation: fadeIn 1.5s ease-out 3s forwards; /* delay after typewriter */
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
 }
 </style>

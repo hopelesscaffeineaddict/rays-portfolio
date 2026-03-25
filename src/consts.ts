@@ -9,26 +9,24 @@ export const KNOWN_TECH = [
   },
   {
     category: "Tools",
-    items: ["Wireshark", "Splunk", "Burp Suite"]
+    items: ["Wireshark", "Splunk", "Burp Suite", "Binary Ninja", "IDA Pro"]
   },
   {
     category: "Languages",
-    items: ["Python", "SQL", "C", "Bash"]
+    items: ["Python", "SQL", "C", "Bash", "PowerShell"]
   },
   {
-    category: "Cloud (learning!)",
-    items: ["AWS", "Docker", "Terraform", "Kubernetes"]
+    category: "DFIR",
+    items: ["Voltaility", "Autopsy"]
   }
 ];
 
 export const ABOUT_ME =
-  `sup, I'm ray! I'm a CS student studying in Australia ;) 
-  I'm pretty interested in threat intelligence (ask me about APT44!!), but just *very* recently I've been trying to develop cloud skills because... why not lol? 
-  Hence this website. (it's my third attempt at making a personal website.) stay tuned!
+  `sup, I'm ray! I'm a security analyst and CS student in Australia! I'm really interested in digital forensics and threat intelligence, especially in the context of games. It's also my third attempt at making a website :,)
 
 `.trim();
 export const GITHUB_USERNAME = "hopelesscaffeineaddict";
-export const QUOTE = "Cybersecurity Enthusiast, Gamer, and CS Student";
+export const QUOTE = "Security Analyst, Gamer, and CS Student";
 export const NAV_LINKS: Array<{ title: string; href?: string }> = [
   {
     title: "Blog",
@@ -43,6 +41,6 @@ export const NAV_LINKS: Array<{ title: string; href?: string }> = [
   },
   {
     title: "Resume",
-    href: "rrrr",
+    href: "",
   }
 ];
