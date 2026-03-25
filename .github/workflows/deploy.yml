@@ -1,11 +1,11 @@
-# .github/workflows/deploy.yml
-name: Deploy Cloudflare Worker
+name: Deploy Astro to Cloudflare Workers
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+  # Optional: Enable PR previews later if needed
+  # pull_request:
+  #   branches: ["main"]
 
 jobs:
   deploy:
@@ -15,29 +15,38 @@ jobs:
       contents: read
 
     steps:
-      - name: Clone repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
+          cache: "npm"
 
-      - name: Install wrangler (Cloudflare CLI)
-        run: npm install -g wrangler
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Security Scan: Check for exposed secrets
-        uses: trufflesecurity/trufflehog@main
+      - name: Security Scan - Check for exposed secrets
+        uses: trufflesecurity/trufflehog@v3.82.0   
         with:
           path: ./
           extra_args: --only-verified
 
+      - name: Build Astro Site
+        run: npm run build
+        env:
+          # Ensure Astro builds correctly in CI
+          NODE_ENV: production
+
       - name: Deploy to Cloudflare Workers
-        run: wrangler deploy
+        run: npx wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # If your wrangler.toml uses account_id explicitly, you might need this too:
+          # CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Deployment Complete
         run: |
-          echo "Successfully deployed to Cloudflare Workers"
-          echo "View: https://rays-portfolio.rayneorshine03.workers.dev"
+          echo "✅ Successfully deployed to Cloudflare Workers!"
+          echo "🔗 View: https://rays-portfolio.rayneorshine03.workers.dev"
