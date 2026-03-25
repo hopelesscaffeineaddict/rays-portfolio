@@ -17,7 +17,7 @@ export const KNOWN_TECH = [
   },
   {
     category: "DFIR",
-    items: ["Voltaility", "Autopsy"]
+    items: ["Volatility", "Autopsy"]
   }
 ];
 
@@ -27,20 +27,10 @@ export const ABOUT_ME =
 `.trim();
 export const GITHUB_USERNAME = "hopelesscaffeineaddict";
 export const QUOTE = "Security Analyst, Gamer, and CS Student";
-export const NAV_LINKS: Array<{ title: string; href?: string }> = [
-  {
-    title: "Blog",
-  },
-  {
-    title: "Github",
-    href: "//github.com/" + GITHUB_USERNAME,
-  },
-  {
-    title: "Email",
-    href: "rayneorshine03@gmail.com",
-  },
-  {
-    title: "Resume",
-    href: "",
-  }
+
+export const NAV_LINKS: Array<{ title: string; href?: string; target?: string }> = [
+  { title: "Blog" },
+  { title: "Github", href: "//github.com/" + GITHUB_USERNAME, target: "_blank" },
+  { title: "Email", href: "mailto:rayneorshine03@gmail.com" },
+  { title: "Resume", href: "/resume.pdf", target: "_blank" } 
 ];
