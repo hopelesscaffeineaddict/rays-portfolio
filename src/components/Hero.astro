@@ -4,16 +4,15 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
 
 <section
   id="hero"
-  class="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 gap-8 px-6 md:px-16 overflow-x-hidden relative"
+  class="w-full grid grid-cols-1 md:grid-cols-2 overflow-x-hidden relative"
+  style="min-height: 100svh; padding-inline: clamp(1rem, 4vw, 4rem); gap: clamp(1rem, 3vw, 3rem);"
 >
-  <!-- ── Left: Text Block ─────────────────────────────────────────────
-       justify-center = vertically centred within the full column height
-       items-start    = text stays left-aligned                         -->
+  <!-- ── Left: Text Block ───────────────────────────────────────────── -->
   <div
-    class="flex flex-col justify-center items-center gap-5 z-10 pt-20 lg:pt-0 min-w-0 overflow-hidden"
+    class="flex flex-col justify-center items-center gap-5 z-10 pt-20 md:pt-0 min-w-0 overflow-hidden"
   >
     <h1
-      class="font-monster text-3xl sm:text-4xl md:text-5xl text-white uppercase tracking-widest leading-none text-center"
+      class="hero-title font-monster text-white uppercase tracking-widest leading-none text-center"
     >
       &lt;{SITE_TITLE} /&gt;
     </h1>
@@ -26,16 +25,14 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
 
   </div>
 
-  <!-- ── Right: Dual Cans ─────────────────────────────────────────────
-       items-center + justify-center = cans centred inside the column  -->
+  <!-- ── Right: Dual Cans ──────────────────────────────────────────── -->
   <div
-    class="flex items-center justify-center py-12 lg:py-0"
+    class="flex items-center justify-center py-12 md:py-0 min-w-0"
   >
     <div id="cans-stage">
 
       <!-- Front can -->
       <div class="can-wrapper front-wrapper" id="front-wrapper">
-        <!-- can-unit = rim + body + rim — receives 3D tilt transform -->
         <div class="can-unit front-unit" id="front-unit">
           <div class="can-rim front-top-rim"></div>
 
@@ -167,6 +164,14 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     align-items: flex-end;
   }
 
+  /* On single-column layout (< 768px), constrain stage width */
+  @media (max-width: 767px) {
+    #cans-stage {
+      max-width: min(380px, 85vw);
+      margin-inline: auto;
+    }
+  }
+
   /* ── Can wrapper ─────────────────────────────────────────────────── */
   .can-wrapper {
     display: flex;
@@ -181,15 +186,20 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
 
   .back-wrapper {
     z-index: 1;
-    margin-left: clamp(-36px, -4.4vw, -56px);
+    /*
+     * Fixed: was clamp(-36px, -4.4vw, -56px) which always resolved to -36px
+     * because CSS clamp(MIN,VAL,MAX) = max(MIN, min(VAL,MAX)) and with
+     * MIN(-36) > MAX(-56) the result was always -36px regardless of viewport.
+     * Correct direction: clamp(-56px, -4.4vw, -36px) scales overlap with width.
+     */
+    margin-left: clamp(-56px, -4.4vw, -36px);
   }
 
-  /* Bring back can above front on hover — z-index is not animatable so change is instant */
   .back-wrapper:hover {
     z-index: 3;
   }
 
-  /* ── Can unit (receives 3D tilt transform) ───────────────────────── */
+  /* ── Can unit ────────────────────────────────────────────────────── */
   .can-unit {
     display: flex;
     flex-direction: column;
@@ -200,7 +210,7 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     transform-origin: bottom center;
   }
 
-  /* ── Rims — squashed ellipses simulate can top/bottom caps ───────── */
+  /* ── Rims ────────────────────────────────────────────────────────── */
   .can-rim {
     border-radius: 50%;
     flex-shrink: 0;
@@ -322,12 +332,16 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     will-change: transform;
   }
 
-  /* Cylindrical lighting: specular highlight left-of-centre + deep shadow on right */
   .front-body {
     width: clamp(180px, 22vw, 280px);
-    height: clamp(459px, 55.8vw, 714px);
+    /*
+     * Height: min(vw-based, 70vh) prevents the can from being taller than
+     * 70% of the viewport height on short-screen laptops (e.g. 1280×800).
+     * At 1080p+: 70vh ≥ 756px > 714px max, so vw-based value wins.
+     * At 1280×800: 70vh = 560px < 714px, so height caps at 560px.
+     */
+    height: clamp(300px, min(55.8vw, 70vh), 714px);
     background:
-      /* specular highlight strip at ~15% from left */
       linear-gradient(
         to right,
         rgba(0, 0, 0, 0.50)   0%,
@@ -339,7 +353,6 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
         rgba(0, 0, 0, 0.28)   82%,
         rgba(0, 0, 0, 0.58)  100%
       ),
-      /* metallic base — not flat matte */
       linear-gradient(
         to right,
         #0e0e0e  0%,
@@ -355,7 +368,8 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
 
   .back-body {
     width: clamp(153px, 18.7vw, 238px);
-    height: clamp(430px, 52vw, 664px);
+    /* Same vh cap pattern as front-body, proportionally smaller */
+    height: clamp(260px, min(52vw, 68vh), 664px);
     background:
       linear-gradient(
         to right,
@@ -415,7 +429,6 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     filter: drop-shadow(0 0 18px rgba(0, 220, 50, 0.72));
   }
 
-  /* caffeineaddict — large, fills most of can width */
   .can-brand {
     font-family: "MonsterFont", "VCRosdNEUE", sans-serif;
     font-size: clamp(18px, 2vw, 26px);
@@ -433,7 +446,6 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     z-index: 2;
   }
 
-  /* RAY GOH — smaller, NOT italic, Barlow Condensed 700, green */
   .can-person {
     font-family: "Barlow Condensed", sans-serif;
     font-style: normal;
@@ -466,10 +478,10 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     margin: 0;
   }
 
-  /* ── Back can — dark nutrition label ─────────────────────────────── */
+  /* ── Back can — nutrition label ──────────────────────────────────── */
   .nutrition {
     padding: clamp(8px, 0.85vw, 11px) clamp(9px, 0.95vw, 13px);
-    background: transparent;   /* let can-body dark gradient show */
+    background: transparent;
     color: rgba(255, 255, 255, 0.88);
     width: 100%;
     height: 100%;
@@ -554,17 +566,6 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     font-weight: bold;
   }
 
-  .nutr-footnote {
-    font-family: "Share Tech Mono", monospace;
-    font-size: clamp(7px, 0.65vw, 9px);
-    color: rgba(255, 255, 255, 0.28);
-    text-align: center;
-    white-space: nowrap;
-    margin-top: auto;
-    padding-top: 4px;
-    flex-shrink: 0;
-  }
-
   /* ── Glow pool beneath each can ──────────────────────────────────── */
   .can-glow {
     width: clamp(90px, 9vw, 130px);
@@ -599,9 +600,11 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     opacity: 1;
   }
 
-  /* ── Info panel under [ main ] — hover-revealed, can never moves ─── */
+  /* ── Info panel under [ main ] ───────────────────────────────────── */
   .can-panel {
     width: clamp(180px, 22vw, 280px);
+    /* Safety net: never wider than the viewport */
+    max-width: calc(100vw - 2rem);
     max-height: 0;
     overflow: hidden;
     opacity: 0;
@@ -622,7 +625,7 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     padding: 10px 14px;
   }
 
-  /* ── About me blurb ─────────────────────────────────────────────── */
+  /* ── About me blurb ──────────────────────────────────────────────── */
   .hero-about {
     font-family: "Share Tech Mono", monospace;
     font-size: clamp(10px, 1.1vw, 14px);
@@ -634,7 +637,12 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     word-break: break-word;
   }
 
-  /* ── Hero subtitle (QUOTE line) ─────────────────────────────────── */
+  /* ── Hero title — fluid type, never forces horizontal scroll ─────── */
+  .hero-title {
+    font-size: clamp(1.5rem, 4vw, 4.5rem);
+  }
+
+  /* ── Hero subtitle ───────────────────────────────────────────────── */
   .hero-subtitle {
     font-family: "Share Tech Mono", monospace;
     font-size: clamp(11px, 1.6vw, 20px);
