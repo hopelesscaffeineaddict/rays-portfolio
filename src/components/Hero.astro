@@ -491,7 +491,7 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1.5px;
+    gap: 1px;
     box-sizing: border-box;
     overflow: hidden;
     position: relative;
@@ -500,14 +500,13 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
 
   .nutr-head {
     font-family: "MonsterFont", sans-serif;
-    font-size: clamp(13px, 1.4vw, 18px);
+    font-size: clamp(10px, min(1.3vw, 1.6vh), 15px);
     font-weight: 900;
     letter-spacing: 0.03em;
     text-transform: uppercase;
     color: #fff;
     line-height: 1;
     padding-bottom: 3px;
-    white-space: nowrap;
     flex-shrink: 0;
   }
 
@@ -528,16 +527,17 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
 
   .nutr-serving {
     font-family: "Share Tech Mono", monospace;
-    font-size: clamp(8px, 0.85vw, 11px);
+    font-size: clamp(7px, min(0.85vw, 1.06vh), 10px);
     color: rgba(255, 255, 255, 0.4);
     padding: 1px 0;
-    white-space: nowrap;
+    white-space: normal;
+    word-break: break-word;
     flex-shrink: 0;
   }
 
   .nutr-row {
     font-family: "Share Tech Mono", monospace;
-    font-size: clamp(10px, 1.1vw, 14px);
+    font-size: clamp(8px, min(1.1vw, 1.37vh), 13px);
     color: rgba(255, 255, 255, 0.82);
     display: flex;
     justify-content: space-between;
@@ -551,7 +551,7 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     white-space: nowrap;
   }
   .nutr-row.bold {
-    font-size: clamp(11px, 1.2vw, 15px);
+    font-size: clamp(9px, min(1.2vw, 1.5vh), 14px);
     font-weight: 900;
     color: #fff;
   }
@@ -560,7 +560,7 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
   }
 
   .nutr-hl {
-    font-size: clamp(11px, 1.2vw, 15px);
+    font-size: clamp(9px, min(1.2vw, 1.5vh), 14px);
     font-weight: 900;
     color: #fff;
   }
