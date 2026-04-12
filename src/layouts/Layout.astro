@@ -9,13 +9,13 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 ---
 
-<html lang="en" class="!overflow-x-hidden">
+<html lang="en" style="overflow-x: clip">
   <head>
     <BaseHead title={title} description={description} />
   </head>
 
   <body
-    class="bg-monster-dark text-white tracking-wide !overflow-x-hidden font-mono"
+    class="bg-monster-dark text-white tracking-wide font-mono" style="overflow-x: clip"
   >
     <BinaryBackground />
     <header class="fixed top-0 w-screen z-[9999]"><Navbar /></header>
