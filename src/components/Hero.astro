@@ -132,9 +132,13 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
 </section>
 
 <script is:inline>
-  // Re-attach hover handlers after every navigation (View Transitions)
+  // Re-attach hover handlers after every navigation (View Transitions).
+  // Guard with data-bound so listeners are never added more than once per element.
   document.addEventListener("astro:page-load", function () {
     document.querySelectorAll(".can-wrapper").forEach(function (wrapper) {
+      if (wrapper.dataset.bound) return;
+      wrapper.dataset.bound = "1";
+
       var unit = wrapper.querySelector(".can-unit");
       if (!unit) return;
 

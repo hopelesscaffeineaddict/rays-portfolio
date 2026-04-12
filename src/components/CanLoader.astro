@@ -42,15 +42,27 @@
 </div>
 
 <script is:inline>
-  (function () {
+  // astro:page-load fires after the DOM is fully ready on every navigation,
+  // including back/forward — safe to query the element here.
+  document.addEventListener('astro:page-load', function () {
+    var el = document.getElementById('cl-overlay');
+    if (!el) return;
+
+    // window.__cl_seen persists across soft (View Transitions) navigations
+    // but is cleared on a hard reload — so the animation replays on refresh.
+    if (window.__cl_seen) {
+      el.remove();
+      return;
+    }
+    window.__cl_seen = true;
+
     var prefersReduced =
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var delay = prefersReduced ? 100 : 3000;
     setTimeout(function () {
-      var el = document.getElementById('cl-overlay');
       if (el) el.remove();
     }, delay);
-  })();
+  });
 </script>
 
 <style>
@@ -61,7 +73,7 @@
     z-index: 1000;
     background: #080808;
     animation: cl-overlay-fade 3s ease-in-out forwards;
-    pointer-events: all;
+    pointer-events: none;
   }
 
   .cl-stage {
