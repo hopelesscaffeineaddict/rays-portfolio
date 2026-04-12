@@ -2,25 +2,25 @@
 
 <script is:inline>
 (function () {
-  var canvas = document.getElementById("binary-bg");
-  if (!canvas) return;
-  var ctx = canvas.getContext("2d");
-
   var FONT_SIZE = 13;
   var COL_W = 14;
   var CHARS = ["0", "1"];
-  var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  var cols, drops;
+  // Module-level state — persists across page-load events
   var rafId = null;
+  var resizeTimer = null;
+  var canvas = null;
+  var ctx = null;
+  var cols = 0;
+  var drops = null;
   var frameCount = 0;
+  var prefersReduced = false;
 
   function setup() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     cols = Math.floor(canvas.width / COL_W);
     drops = new Float32Array(cols);
-    // Stagger all columns so they don't all start at the top simultaneously
     for (var i = 0; i < cols; i++) {
       drops[i] = -(Math.random() * (canvas.height / FONT_SIZE));
     }
@@ -41,15 +41,10 @@
 
   function tick() {
     rafId = requestAnimationFrame(tick);
-
-    // Skip draw when tab is hidden
     if (document.hidden) return;
-
-    // Only draw every 3rd frame (~20fps at 60Hz) — cuts GPU cost by 66%
     frameCount++;
     if (frameCount % 3 !== 0) return;
 
-    // Fade trail — semi-transparent black rect slowly erases previous chars
     ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -58,25 +53,16 @@
 
     for (var c = 0; c < cols; c++) {
       var y = drops[c] * FONT_SIZE;
-
-      // Only draw when the drop head is on screen
       if (y >= 0 && y < canvas.height) {
         var ch = CHARS[Math.floor(Math.random() * 2)];
-
-        // 15% chance of bright white flicker per character
         if (Math.random() < 0.15) {
           ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
         } else {
           ctx.fillStyle = "rgba(0, 220, 50, 0.85)";
         }
-
         ctx.fillText(ch, c * COL_W, y);
       }
-
-      // Advance drop head
       drops[c]++;
-
-      // Reset to a random position above the canvas when it exits the bottom
       if (drops[c] * FONT_SIZE > canvas.height) {
         drops[c] = -(Math.floor(Math.random() * (canvas.height / FONT_SIZE) * 0.6) + 5);
       }
@@ -90,45 +76,52 @@
   }
 
   function stopLoop() {
-    if (rafId) {
-      cancelAnimationFrame(rafId);
-      rafId = null;
-    }
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
   }
 
-  // Debounced resize — cancel loop, resize canvas, restart
-  var resizeTimer = null;
+  // Single resize listener for the lifetime of the page
   window.addEventListener("resize", function () {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
+      if (!canvas) return;
       stopLoop();
       setup();
-      if (prefersReduced) {
-        drawStatic();
-      } else {
-        startLoop();
-      }
+      if (prefersReduced) drawStatic();
+      else startLoop();
     }, 200);
   }, { passive: true });
 
-  // Initialise
-  setup();
+  function init() {
+    var el = document.getElementById("binary-bg");
+    if (!el) return;
 
-  if (prefersReduced) {
-    // Static snapshot — no loop
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(drawStatic);
+    // Cancel any orphaned loop from a previous navigation
+    stopLoop();
+
+    canvas = el;
+    ctx = canvas.getContext("2d");
+    prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    frameCount = 0;
+
+    setup();
+
+    if (prefersReduced) {
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(drawStatic);
+      } else {
+        setTimeout(drawStatic, 300);
+      }
     } else {
-      setTimeout(drawStatic, 300);
-    }
-  } else {
-    // Wait for Share Tech Mono so first draw uses the right glyph metrics
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(startLoop);
-    } else {
-      setTimeout(startLoop, 300);
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(startLoop);
+      } else {
+        setTimeout(startLoop, 300);
+      }
     }
   }
+
+  // Fires on initial load AND after every View Transition navigation
+  document.addEventListener("astro:page-load", init);
 })();
 </script>
 

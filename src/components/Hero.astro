@@ -117,7 +117,6 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
               <div class="nutr-row bold nutr-warn">
                 <span>Sleep</span><span>0mg</span>
               </div>
-              <div class="nutr-footnote">* % based on max output</div>
             </div>
           </div>
 
@@ -133,22 +132,25 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
 </section>
 
 <script is:inline>
-  // ── Zoom on hover — no rotation ──────────────────────────────────
-  document.querySelectorAll(".can-wrapper").forEach((wrapper) => {
-    const unit = wrapper.querySelector(".can-unit");
+  // Re-attach hover handlers after every navigation (View Transitions)
+  document.addEventListener("astro:page-load", function () {
+    document.querySelectorAll(".can-wrapper").forEach(function (wrapper) {
+      var unit = wrapper.querySelector(".can-unit");
+      if (!unit) return;
 
-    wrapper.addEventListener("mouseenter", () => {
-      unit.style.transition = "transform 0.2s ease";
-      unit.style.transform = "scale(1.04)";
-    });
+      wrapper.addEventListener("mouseenter", function () {
+        unit.style.transition = "transform 0.2s ease";
+        unit.style.transform = "scale(1.04)";
+      });
 
-    wrapper.addEventListener("mouseleave", () => {
-      unit.style.transition = "transform 0.4s ease-out";
-      unit.style.transform = "";
-    });
+      wrapper.addEventListener("mouseleave", function () {
+        unit.style.transition = "transform 0.4s ease-out";
+        unit.style.transform = "";
+      });
 
-    wrapper.addEventListener("click", () => {
-      wrapper.classList.toggle("expanded");
+      wrapper.addEventListener("click", function () {
+        wrapper.classList.toggle("expanded");
+      });
     });
   });
 </script>
