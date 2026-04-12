@@ -333,13 +333,14 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
   }
 
   .front-body {
-    width: clamp(180px, 22vw, 280px);
     /*
-     * Height: min(vw-based, 70vh) prevents the can from being taller than
-     * 70% of the viewport height on short-screen laptops (e.g. 1280×800).
-     * At 1080p+: 70vh ≥ 756px > 714px max, so vw-based value wins.
-     * At 1280×800: 70vh = 560px < 714px, so height caps at 560px.
+     * Width and height both use min(vw, vh) so the can aspect ratio (~2.55:1)
+     * is preserved on short-screen laptops — when 70vh caps the height,
+     * 27.5vh (= 70vh ÷ 2.55) caps the width by the same proportion.
+     * At 1080p+: both vh values exceed the clamp max, so max governs.
+     * At 1280×800: 70vh=560px, 27.5vh=220px → ratio 560/220 = 2.55 ✓
      */
+    width: clamp(180px, min(22vw, 27.5vh), 280px);
     height: clamp(300px, min(55.8vw, 70vh), 714px);
     background:
       linear-gradient(
@@ -367,8 +368,8 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
   }
 
   .back-body {
-    width: clamp(153px, 18.7vw, 238px);
-    /* Same vh cap pattern as front-body, proportionally smaller */
+    /* Back can is 85% of front width; 23.4vh = 27.5vh × 0.85 */
+    width: clamp(153px, min(18.7vw, 23.4vh), 238px);
     height: clamp(260px, min(52vw, 68vh), 664px);
     background:
       linear-gradient(
@@ -399,7 +400,8 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     background: rgba(0, 0, 0, 0.72);
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     font-family: "MonsterFont", "VCRosdNEUE", sans-serif;
-    font-size: clamp(12px, 1.4vw, 17px);
+    /* Scale with can width: 1.7vh = 1.4vw × (27.5/22) × 0.97 */
+    font-size: clamp(8px, min(1.4vw, 1.7vh), 15px);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.72);
@@ -431,7 +433,8 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
 
   .can-brand {
     font-family: "MonsterFont", "VCRosdNEUE", sans-serif;
-    font-size: clamp(18px, 2vw, 26px);
+    /* Scale with can width: 2.2vh = 2vw × (27.5/22) × 0.88 — conservative to prevent clip */
+    font-size: clamp(10px, min(1.8vw, 2.2vh), 24px);
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: #fff;
@@ -450,7 +453,8 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     font-family: "Barlow Condensed", sans-serif;
     font-style: normal;
     font-weight: 700;
-    font-size: clamp(14px, 1.5vw, 19px);
+    /* Scale with can width: 1.8vh = 1.5vw × 1.25 × 0.96 */
+    font-size: clamp(10px, min(1.4vw, 1.8vh), 17px);
     color: #00dc32;
     text-align: center;
     letter-spacing: 0.1em;

@@ -120,8 +120,14 @@
     }
   }
 
-  // Fires on initial load AND after every View Transition navigation
+  // astro:page-load — fires after every View Transition navigation (including initial load on desktop)
   document.addEventListener("astro:page-load", init);
+
+  // DOMContentLoaded — fallback for mobile browsers (iOS Safari etc.) where
+  // astro:page-load timing may be unreliable on first paint.
+  // If both events fire, the second init() call just cancels and restarts the
+  // loop cleanly via stopLoop() — no visual artefact.
+  document.addEventListener("DOMContentLoaded", init);
 })();
 </script>
 
