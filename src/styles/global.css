@@ -1,31 +1,72 @@
 @font-face {
-  font-family: "VCR";
-  src: url("/fonts/VCRosdNEUE.ttf") format("truetype");
-  font-style: normal;
+  font-family: 'MonsterFont';
+  src: url('/fonts/monster.woff2') format('woff2'),
+       url('/fonts/monster.ttf') format('truetype');
   font-display: swap;
 }
+@font-face {
+  font-family: 'VCRosdNEUE';
+  src: url('/fonts/VCRosdNEUE.ttf') format('truetype');
+  font-display: swap;
+}
+
 body {
-  font-family: "VCR", monospace !important;
+  font-family: 'Share Tech Mono', 'VCRosdNEUE', monospace;
+  background-color: #080808;
+}
+
+/* Scanline overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.09) 3px,
+    rgba(0, 0, 0, 0.09) 4px
+  );
 }
 
 pre,
 code {
-  font-family: "VCR", monospace !important;
+  font-family: 'Share Tech Mono', 'VCRosdNEUE', monospace !important;
   font-weight: 100;
 }
 
 ::selection {
-  background: #fff;
-  color: #000;
+  background: #00dc32;
+  color: #080808;
 }
-
 ::-moz-selection {
-  background: #fff;
-  color: #000;
+  background: #00dc32;
+  color: #080808;
 }
 
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #00dc32 #0d0d0d;
+}
+
+/* Chromium / Safari */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+::-webkit-scrollbar-thumb {
+  background: #00dc32;
+  border-radius: 3px;
+  box-shadow: 0 0 6px #00dc32, 0 0 12px rgba(0, 220, 50, 0.4);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00ff3c;
+  box-shadow: 0 0 8px #00ff3c, 0 0 18px rgba(0, 255, 60, 0.5);
 }
 
 img,
@@ -44,7 +85,8 @@ img,
   z-index: -1;
   width: 100vw;
   word-wrap: break-word;
-  opacity: 0.02;
+  opacity: 0.04;
   font-size: 3rem;
   user-select: none;
+  color: #00dc32;
 }

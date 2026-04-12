@@ -1,0 +1,376 @@
+---
+// No props — pure CSS animation, self-contained
+---
+
+<div id="cl-overlay" aria-hidden="true" role="presentation">
+  <div class="cl-stage">
+
+    <!-- Pivot: zero-size anchor at 40%/50% viewport — can opening stays here -->
+    <div class="cl-pivot">
+
+      <!-- Can assembly — rotates around its top-centre -->
+      <div class="cl-wrap">
+        <div class="cl-tab"></div>
+        <div class="cl-top-rim"></div>
+        <div class="cl-body">
+          <img
+            src="/icons/monster_energy_v2.svg"
+            class="cl-logo"
+            alt=""
+            aria-hidden="true"
+          />
+          <div class="cl-contents">
+            <div class="cl-water"></div>
+            <div class="cl-inner-foam"></div>
+          </div>
+        </div>
+        <div class="cl-strip"></div>
+        <div class="cl-bottom-rim"></div>
+      </div>
+
+      <!-- Drop and stream are outside cl-wrap so they fall straight down -->
+      <div class="cl-drop"></div>
+      <div class="cl-stream"></div>
+    </div>
+
+    <!-- Pool builds at the bottom of the screen -->
+    <div class="cl-pool">
+      <div class="cl-pool-foam"></div>
+    </div>
+
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var prefersReduced =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var delay = prefersReduced ? 100 : 3000;
+    setTimeout(function () {
+      var el = document.getElementById('cl-overlay');
+      if (el) el.remove();
+    }, delay);
+  })();
+</script>
+
+<style>
+  /* ── Overlay ─────────────────────────────────────────────────────── */
+  #cl-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: #080808;
+    animation: cl-overlay-fade 3s ease-in-out forwards;
+    pointer-events: all;
+  }
+
+  .cl-stage {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  /*
+   * Pivot — a zero-size anchor at 40% / 50% of the viewport.
+   * The top of the can sits here; when it rotates the opening stays fixed,
+   * so the drop and stream fall straight down from this point.
+   */
+  .cl-pivot {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+  }
+
+  /* ── Can assembly ────────────────────────────────────────────────── */
+  .cl-wrap {
+    position: absolute;
+    top: 0;
+    left: -35px;               /* half of 70px centres can on pivot */
+    width: 70px;
+    transform-origin: 35px 0;  /* top-centre = pivot point */
+    animation: cl-can-pour 3s cubic-bezier(0.45, 0, 0.55, 1) forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Pull tab */
+  .cl-tab {
+    width: 26px;
+    height: 9px;
+    align-self: center;
+    background: linear-gradient(180deg, #d8d8d8 0%, #a0a0a0 50%, #666 100%);
+    border-radius: 3px 3px 1px 1px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 2px 4px rgba(0,0,0,0.7);
+    flex-shrink: 0;
+  }
+
+  /* Top rim — same metallic gradient as CanHero */
+  .cl-top-rim {
+    width: 70px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(180deg,
+      #c0c0c0 0%, #909090 15%, #686868 35%,
+      #444 60%, #2a2a2a 80%, #1a1a1a 100%
+    );
+    box-shadow: 0 2px 8px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.4);
+    flex-shrink: 0;
+    position: relative;
+  }
+  .cl-top-rim::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 10%;
+    width: 40%;
+    height: 6px;
+    background: rgba(255,255,255,0.45);
+    border-radius: 50%;
+  }
+
+  /* Can body — same cylindrical lighting as CanHero */
+  .cl-body {
+    width: 70px;
+    height: 175px;
+    background:
+      linear-gradient(to right,
+        rgba(0,0,0,0.50)        0%,
+        rgba(0,0,0,0.20)       10%,
+        rgba(255,255,255,0.10) 16%,
+        rgba(255,255,255,0.04) 26%,
+        transparent            38%,
+        transparent            68%,
+        rgba(0,0,0,0.28)       82%,
+        rgba(0,0,0,0.58)      100%
+      ),
+      linear-gradient(to right,
+        #0e0e0e 0%, #1f1f1f 20%, #1c1c1c 50%, #141414 80%, #080808 100%
+      );
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cl-logo {
+    width: 65%;
+    height: auto;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    animation: cl-logo-glow 3s ease-in-out forwards;
+  }
+
+  .cl-contents {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  /* Liquid fills bottom-up, then rotates to stay "level" as can tilts */
+  .cl-water {
+    position: absolute;
+    left: -5%;
+    right: -5%;
+    bottom: 0;
+    height: 100%;
+    background: rgba(0, 220, 50, 0.85);
+    transform: scaleY(0);
+    transform-origin: bottom center;
+    animation: cl-fill-water 3s ease-in-out forwards;
+    z-index: 1;
+  }
+
+  .cl-inner-foam {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 22%;
+    background: #006614;
+    transform: scaleY(0);
+    transform-origin: bottom center;
+    animation: cl-fill-foam 3s ease-in-out forwards;
+    z-index: 2;
+  }
+
+  /* Green strip */
+  .cl-strip {
+    width: 70px;
+    height: 10px;
+    background: linear-gradient(180deg,
+      #00ff44 0%, #00DC32 40%, #009922 70%, #006614 100%
+    );
+    box-shadow: 0 0 10px rgba(0,220,50,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+    border-radius: 0 0 3px 3px;
+    flex-shrink: 0;
+  }
+
+  /* Bottom rim */
+  .cl-bottom-rim {
+    width: 70px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(180deg,
+      #c0c0c0 0%, #909090 15%, #686868 35%,
+      #444 60%, #2a2a2a 80%, #1a1a1a 100%
+    );
+    box-shadow: 0 5px 12px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.4);
+    flex-shrink: 0;
+  }
+
+  /* Drop — at pivot point, falls straight down */
+  .cl-drop {
+    position: absolute;
+    top: -5px;
+    left: -7px;
+    width: 14px;
+    height: 14px;
+    background: #00DC32;
+    border-radius: 0 100% 100% 100%;
+    transform: rotate(-45deg) scale(0);
+    transform-origin: left top;
+    animation: cl-drop 3s ease-in-out forwards;
+    filter: drop-shadow(0 0 4px rgba(0,220,50,0.8));
+    z-index: 5;
+  }
+
+  /* Stream — vertical bar from pivot downward, visible during pour */
+  .cl-stream {
+    position: absolute;
+    top: 0;
+    left: -5px;
+    width: 10px;
+    height: 55vh;
+    background: linear-gradient(to bottom,
+      rgba(0,220,50,0.9)   0%,
+      rgba(0,220,50,0.55) 55%,
+      rgba(0,220,50,0.1) 100%
+    );
+    transform: scaleY(0);
+    transform-origin: top center;
+    animation: cl-stream 3s ease-in-out forwards;
+    border-radius: 0 0 5px 5px;
+    z-index: 3;
+  }
+
+  /* Green pool at the bottom of the screen */
+  .cl-pool {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: rgba(0, 220, 50, 0.85);
+    transform: scaleY(0);
+    transform-origin: bottom center;
+    animation: cl-pool-fill 3s ease-in-out forwards;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0,220,50,0.35);
+  }
+
+  .cl-pool-foam {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 35%;
+    background: #006614;
+    border-top: 2px solid #009922;
+    transform: scaleY(0);
+    transform-origin: bottom center;
+    animation: cl-pool-foam-kf 3s ease-in-out forwards;
+  }
+
+  /* ── Keyframes ──────────────────────────────────────────────────── */
+
+  @keyframes cl-overlay-fade {
+    0%, 88%  { opacity: 1; }
+    100%     { opacity: 0; }
+  }
+
+  @keyframes cl-can-pour {
+    0%, 10%  { transform: rotate(0deg); }
+    30%      { transform: rotate(105deg); }
+    65%      { transform: rotate(105deg); }
+    80%      { transform: rotate(0deg); }
+    100%     { transform: rotate(0deg); }
+  }
+
+  @keyframes cl-logo-glow {
+    0%, 5%   { opacity: 0;   filter: drop-shadow(0 0 0   rgba(0,220,50,0)); }
+    14%      { opacity: 1;   filter: drop-shadow(0 0 16px rgba(0,220,50,0.9)); }
+    28%      { opacity: 0.9; filter: drop-shadow(0 0 14px rgba(0,220,50,0.7)); }
+    100%     { opacity: 0.9; filter: drop-shadow(0 0 14px rgba(0,220,50,0.7)); }
+  }
+
+  /*
+   * Liquid fills from bottom (scaleY 0→1 by 28%), then transform-origin
+   * shifts to top-right so a −105 deg counter-rotation keeps the liquid
+   * visually level (gravity) while the can is tilted at +105 deg.
+   */
+  @keyframes cl-fill-water {
+    0%, 10%   { transform: scaleY(0);   transform-origin: bottom center; }
+    28%       { transform: scaleY(1);   transform-origin: bottom center; }
+    45%, 55%  {
+      transform: scaleY(1) rotate(0deg);
+      background-color: rgba(0,220,50,0.85);
+      transform-origin: top right;
+    }
+    72%, 100% {
+      transform: rotate(-105deg);
+      background-color: rgba(0,153,34,0.9);
+      transform-origin: top right;
+    }
+  }
+
+  @keyframes cl-fill-foam {
+    0%, 15%   { transform: scaleY(0); opacity: 0; }
+    30%, 68%  { transform: scaleY(1); opacity: 1; }
+    82%, 100% { transform: scaleY(0); opacity: 0; }
+  }
+
+  @keyframes cl-drop {
+    0%, 28%  { transform: rotate(-45deg) scale(0);                        opacity: 1; }
+    36%      { transform: rotate(-45deg) scale(1.3);                      opacity: 1; }
+    40%      { transform: rotate(-45deg) scale(1);                        opacity: 1; }
+    68%      { transform: rotate(-45deg) scale(1) translate(10px, 52vh);  opacity: 0; }
+    100%     { transform: rotate(-45deg) scale(0);                        opacity: 0; }
+  }
+
+  @keyframes cl-stream {
+    0%, 30%   { transform: scaleY(0); opacity: 0; }
+    36%       { transform: scaleY(1); opacity: 1; }
+    63%       { transform: scaleY(1); opacity: 1; }
+    74%, 100% { transform: scaleY(0); opacity: 0; }
+  }
+
+  @keyframes cl-pool-fill {
+    0%, 30%  { transform: scaleY(0); opacity: 1; }
+    36%      { transform: scaleY(0.2); }
+    65%      { transform: scaleY(1);  opacity: 1; }
+    82%, 85% { transform: scaleY(1);  opacity: 1; }
+    93%      { opacity: 0; }
+    100%     { opacity: 0; transform: scaleY(1); }
+  }
+
+  @keyframes cl-pool-foam-kf {
+    0%, 36%  { transform: scaleY(0); opacity: 0; }
+    42%      { transform: scaleY(1); opacity: 1; }
+    82%, 85% { transform: scaleY(1); opacity: 1; }
+    93%      { opacity: 0; }
+    100%     { opacity: 0; }
+  }
+
+  /* Reduced motion: hide immediately, JS removes element after 100ms */
+  @media (prefers-reduced-motion: reduce) {
+    #cl-overlay {
+      animation: none !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+  }
+</style>

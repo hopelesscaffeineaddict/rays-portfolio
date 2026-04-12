@@ -1,0 +1,62 @@
+<div id="can-fill-wrap">
+  <div id="can-fill-liquid"></div>
+</div>
+
+<script is:inline>
+(function () {
+  var wrap = document.getElementById("can-fill-wrap");
+  var liquid = document.getElementById("can-fill-liquid");
+  if (!wrap || !liquid) return;
+
+  var ticking = false;
+  function update() {
+    var docH = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = docH > 0 ? Math.min(window.scrollY / docH, 1) * 100 : 0;
+    wrap.style.setProperty("--fill-pct", pct + "%");
+    ticking = false;
+  }
+
+  window.addEventListener("scroll", function () {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  update();
+})();
+</script>
+
+<style>
+  #can-fill-wrap {
+    position: fixed;
+    bottom: 2rem;
+    right: 1.5rem;
+    width: 28px;
+    height: 70px;
+    border-radius: 4px 4px 2px 2px;
+    border: 1px solid #333;
+    background: #111;
+    z-index: 9000;
+    pointer-events: none;
+    overflow: hidden;
+    --fill-pct: 0%;
+  }
+
+  #can-fill-liquid {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--fill-pct);
+    background: #00DC32;
+    box-shadow: 0 0 6px #00DC32;
+    transition: height 0.1s linear;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #can-fill-liquid {
+      transition: none;
+    }
+  }
+</style>

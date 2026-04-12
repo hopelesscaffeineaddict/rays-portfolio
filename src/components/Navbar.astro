@@ -2,20 +2,23 @@
 import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
 ---
 
-<nav class="w-full !z-[9999] py-5 px-4 bg-black/90 backdrop-blur-sm">
+<nav
+  class="w-full z-[9999] py-4 px-4 bg-monster-dark/90 backdrop-blur-sm border-b border-monster/20"
+>
   <div
     class="w-full grid gap-4 md:px-5 place-items-center grid-cols-1 md:flex md:justify-between md:px-4"
   >
     <a href="/">
       <div
         id="logo"
-        class="pt-2 pb-1 !grid !place-items-center select-none leading-none hover:bg-black bg-white scale-110 hover:text-white text-black px-4 transition-all ease-in-out"
+        class="font-monster pt-2 pb-1 !grid !place-items-center select-none leading-none uppercase tracking-widest text-monster hover:text-monster-dark hover:bg-monster bg-transparent border border-monster px-4 transition-all ease-in-out"
+        style="text-shadow: 0 0 12px rgba(0,220,50,0.5);"
       >
         {SITE_TITLE}
       </div>
     </a>
-    <div class="flex flex-wrap gap-4 md:pr-5">
-      <div class="hidden md:block">/</div>
+    <div class="flex flex-wrap gap-4 md:pr-5 items-center">
+      <span class="hidden md:block text-monster/40 font-mono">/</span>
       {
         links.map((link) => {
           const href =
@@ -30,15 +33,20 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
           return (
             <>
               <a
-                class:list={[{ "bg-white text-black": isActive }]}
-                class="hover:bg-white hover:text-black transition-all ease-in-out px-2 max-w-fit"
+                class:list={[
+                  "font-mono uppercase tracking-widest text-sm transition-all ease-in-out px-2 py-0.5 max-w-fit hover:text-monster hover:border-b hover:border-monster",
+                  {
+                    "text-monster border-b border-monster": isActive,
+                    "text-white/70": !isActive,
+                  },
+                ]}
                 href={link.href ?? `/${href}`}
                 target={link.target}
                 rel={link.rel}
               >
-                <div>{link.title}</div>
+                {link.title}
               </a>
-              <div class="hidden md:block">/</div>
+              <span class="hidden md:block text-monster/40 font-mono">/</span>
             </>
           );
         })
@@ -52,11 +60,9 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
     const logo = document.getElementById("logo");
     if (!logo) return;
     if (window.scrollY > 100) {
-      logo.className =
-        "pt-2 pb-1 !grid !place-items-center select-none leading-none hover:bg-white bg-black scale-100 hover:text-black text-white px-4 transition-all ease-in-out";
+      logo.style.textShadow = "none";
     } else {
-      logo.className =
-        "pt-2 pb-1 !grid !place-items-center select-none leading-none hover:bg-black bg-white scale-110 hover:text-white text-black px-4 transition-all ease-in-out";
+      logo.style.textShadow = "0 0 12px rgba(0,220,50,0.5)";
     }
   });
 </script>

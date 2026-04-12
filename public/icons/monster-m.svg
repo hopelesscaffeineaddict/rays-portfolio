@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 162 220" fill="#00DC32">
+  <!-- Left claw mark -->
+  <path d="M4 0 H48 L44 148 L34 178 L24 210 L14 178 L4 148 Z"/>
+  <!-- Middle claw mark -->
+  <path d="M61 0 H105 L101 148 L91 178 L81 210 L71 178 L61 148 Z"/>
+  <!-- Right claw mark -->
+  <path d="M118 0 H162 L158 148 L148 178 L138 210 L128 178 L118 148 Z"/>
+</svg>

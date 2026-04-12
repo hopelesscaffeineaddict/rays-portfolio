@@ -1,4 +1,5 @@
 export const SITE_TITLE = "caffeineaddict";
+export const DISPLAY_NAME = "ray goh";
 export const SITE_DESCRIPTION =
   `Ray's Portfolio.`.trim();
 

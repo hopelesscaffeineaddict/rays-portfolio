@@ -13,26 +13,30 @@ const { title, pubDate, updatedDate, heroImage } = Astro.props;
     <div class="w-full grid place-items-center my-10 px-10 overflow-x-hidden">
       {
         heroImage && (
-          <img src={heroImage} alt="hero-image" class="rounded-2xl" />
+          <img
+            src={heroImage}
+            alt="hero-image"
+            class="rounded-lg border border-monster/30"
+          />
         )
       }
     </div>
     <div
-      class="prose !max-w-[90vw] overflow-x-hidden !break-words brightness-110 prose-img:scale-90 prose-img:rounded-2xl prose-invert prose-hr:border-white prose-hr:bg-white px-4 md:px-0 md:max-w-4xl"
+      class="prose !max-w-[90vw] overflow-x-hidden !break-words prose-invert prose-img:rounded-lg prose-img:scale-90 prose-hr:border-monster/40 prose-a:text-monster prose-a:no-underline hover:prose-a:underline prose-headings:font-monster prose-headings:uppercase prose-headings:tracking-widest prose-code:text-monster prose-code:bg-surface px-4 md:px-0 md:max-w-4xl"
     >
       <div>
-        <div>
+        <div class="font-mono text-monster/70 text-sm uppercase tracking-widest">
           <FormattedDate date={pubDate} />
           {
             updatedDate && (
-              <div class="last-updated-on">
-                Last updated on <FormattedDate date={updatedDate} />
+              <div class="text-white/50 mt-1">
+                Last updated: <FormattedDate date={updatedDate} />
               </div>
             )
           }
         </div>
-        <h1>{title}</h1>
-        <hr />
+        <h1 class="font-monster uppercase tracking-widest mt-4">{title}</h1>
+        <hr class="border-monster/40 my-6" />
       </div>
       <slot />
     </div>

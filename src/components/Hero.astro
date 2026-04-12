@@ -1,81 +1,681 @@
 ---
-import { Image } from "astro:assets";
-import HeroImg from "@/hero.png";
-import { QUOTE, SITE_TITLE } from "@/consts";
+import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
 ---
 
-<div class="hero-bg hidden md:block h-screen hero-bg-animate absolute top-0"></div>
-
 <section
-  class="h-screen !z-[20] relative w-full flex flex-col md:flex-row items-center gap-4"
   id="hero"
+  class="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 gap-8 px-6 md:px-16 overflow-x-hidden relative"
 >
-  <!-- Left: Text -->
-  <div class="w-full md:w-1/2 grid place-items-center px-4">
-    <div class="text-center">
-      <h1 class="typewriter text-5xl sm:text-6xl md:text-7xl font-bold text-white mx-auto">
-        &lt;{SITE_TITLE} /&gt;
-      </h1>
-      <h2 class="text-lg sm:text-xl md:text-2xl mt-2 opacity-95 break-words text-center">
-        {QUOTE}
-      </h2>
-    </div>
+  <!-- ── Left: Text Block ─────────────────────────────────────────────
+       justify-center = vertically centred within the full column height
+       items-start    = text stays left-aligned                         -->
+  <div
+    class="flex flex-col justify-center items-center gap-5 z-10 pt-20 lg:pt-0 min-w-0 overflow-hidden"
+  >
+    <h1
+      class="font-monster text-3xl sm:text-4xl md:text-5xl text-white uppercase tracking-widest leading-none text-center"
+    >
+      &lt;{SITE_TITLE} /&gt;
+    </h1>
+
+    <p class="hero-subtitle">
+      Security Analyst . Gamer . CS Student
+    </p>
+
+    <p class="hero-about">{ABOUT_ME}</p>
+
   </div>
 
-  <!-- Right: Image -->
-  <div class="w-full md:w-1/2 px-4">
-    <Image
-      alt="Hero"
-      src={HeroImg}
-      class="brightness-200 w-full scale-90 invert"
-    />
+  <!-- ── Right: Dual Cans ─────────────────────────────────────────────
+       items-center + justify-center = cans centred inside the column  -->
+  <div
+    class="flex items-center justify-center py-12 lg:py-0"
+  >
+    <div id="cans-stage">
+
+      <!-- Front can -->
+      <div class="can-wrapper front-wrapper" id="front-wrapper">
+        <!-- can-unit = rim + body + rim — receives 3D tilt transform -->
+        <div class="can-unit front-unit" id="front-unit">
+          <div class="can-rim front-top-rim"></div>
+
+          <div class="can-body front-body" id="front-body">
+            <div class="can-banner">UNLEASH THE CODE</div>
+
+            <div class="can-m-zone">
+              <img
+                src="/icons/monster_energy_v2.svg"
+                alt=""
+                aria-hidden="true"
+                class="can-m"
+              />
+            </div>
+
+            <div class="can-brand">caffeineaddict</div>
+            <div class="can-person">{DISPLAY_NAME}</div>
+          </div>
+
+          <div class="can-strip"></div>
+          <div class="can-rim front-bottom-rim"></div>
+        </div>
+
+        <!-- Hover chrome — sits outside the tilting unit -->
+        <div class="can-glow"></div>
+        <div class="can-selector">[ main ]</div>
+        <div class="can-panel">
+          <p class="panel-line">Security Analyst · CS Student · AU</p>
+          <div class="panel-rows">
+            <div class="panel-row">
+              <span class="pr-label">Specialty</span>
+              <span class="pr-val">DFIR · Threat Intel</span>
+            </div>
+            <div class="panel-row">
+              <span class="pr-label">Status</span>
+              <span class="pr-val pr-green">Actively Caffeinated</span>
+            </div>
+            <div class="panel-row">
+              <span class="pr-label">Hobbies</span>
+              <span class="pr-val">Gaming · CTF · Homelab</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back can (nutrition / stats) -->
+      <div class="can-wrapper back-wrapper" id="back-wrapper">
+        <div class="can-unit back-unit" id="back-unit">
+          <div class="can-rim back-top-rim"></div>
+
+          <div class="can-body back-body" id="back-body">
+            <div class="nutrition">
+              <div class="nutr-head">Technical Skills</div>
+              <div class="nutr-rule thick"></div>
+              <div class="nutr-serving">Serving Size: 1 dev (24hrs)</div>
+              <div class="nutr-rule"></div>
+
+              <div class="nutr-row bold">
+                <span>Caffeine</span><span class="nutr-hl">800mg</span>
+              </div>
+              <div class="nutr-rule thin"></div>
+
+              <div class="nutr-row"><span>Python</span><span>Expert</span></div>
+              <div class="nutr-row"><span>Security CTF</span><span>++</span></div>
+              <div class="nutr-rule thin"></div>
+
+              <div class="nutr-row"><span>Wireshark</span><span class="nutr-check">✓</span></div>
+              <div class="nutr-row"><span>Burp Suite</span><span class="nutr-check">✓</span></div>
+              <div class="nutr-row"><span>Splunk</span><span class="nutr-check">✓</span></div>
+              <div class="nutr-row"><span>Binary Ninja</span><span class="nutr-check">✓</span></div>
+              <div class="nutr-row"><span>IDA Pro</span><span class="nutr-check">✓</span></div>
+              <div class="nutr-rule thin"></div>
+
+              <div class="nutr-row"><span>C / Bash</span><span class="nutr-check">✓</span></div>
+              <div class="nutr-row"><span>SQL</span><span class="nutr-check">✓</span></div>
+              <div class="nutr-row"><span>PowerShell</span><span class="nutr-check">✓</span></div>
+              <div class="nutr-rule thick"></div>
+
+              <div class="nutr-row bold nutr-warn">
+                <span>Sleep</span><span>0mg</span>
+              </div>
+              <div class="nutr-footnote">* % based on max output</div>
+            </div>
+          </div>
+
+          <div class="can-rim back-bottom-rim"></div>
+        </div>
+
+        <div class="can-glow"></div>
+        <div class="can-selector">[ stats ]</div>
+      </div>
+
+    </div><!-- #cans-stage -->
   </div>
 </section>
 
 <script is:inline>
-  // Binary background animation
-  const hero_bg = document.querySelector(".hero-bg-animate");
-  setInterval(() => {
-    let binaryText = "";
-    for (let i = 0; i < 1000; i++) {
-      binaryText += Math.floor(Math.random() * 2).toString();
-    }
-    hero_bg.textContent = binaryText;
-  }, 300);
+  // ── Zoom on hover — no rotation ──────────────────────────────────
+  document.querySelectorAll(".can-wrapper").forEach((wrapper) => {
+    const unit = wrapper.querySelector(".can-unit");
+
+    wrapper.addEventListener("mouseenter", () => {
+      unit.style.transition = "transform 0.2s ease";
+      unit.style.transform = "scale(1.04)";
+    });
+
+    wrapper.addEventListener("mouseleave", () => {
+      unit.style.transition = "transform 0.4s ease-out";
+      unit.style.transform = "";
+    });
+
+    wrapper.addEventListener("click", () => {
+      wrapper.classList.toggle("expanded");
+    });
+  });
 </script>
 
 <style>
-/* Typewriter animation with hacker green cursor */
-.typewriter {
-  overflow: hidden;                  /* Hide text until typed */
-  white-space: nowrap;               /* Keep it on a single line */
-  border-right: 0.15em solid #00ff00; /* Hacker green cursor */
-  letter-spacing: 0.1em;
-  animation: 
-    typing 3.5s steps(40, end),
-    blink-caret 0.75s step-end infinite;
-}
+  /* ── Stage ───────────────────────────────────────────────────────── */
+  #cans-stage {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+  }
 
-/* Typing effect */
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
+  /* ── Can wrapper ─────────────────────────────────────────────────── */
+  .can-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
 
-/* Cursor blink */
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: #00ff00; }
-}
-</style>
+  .front-wrapper {
+    z-index: 2;
+  }
 
-<style>
-h2 {
-  opacity: 0;
-  animation: fadeIn 1.5s ease-out 3s forwards; /* delay after typewriter */
-}
+  .back-wrapper {
+    z-index: 1;
+    margin-left: clamp(-36px, -4.4vw, -56px);
+  }
 
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
+  /* Bring back can above front on hover — z-index is not animatable so change is instant */
+  .back-wrapper:hover {
+    z-index: 3;
+  }
+
+  /* ── Can unit (receives 3D tilt transform) ───────────────────────── */
+  .can-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .back-unit {
+    transform-origin: bottom center;
+  }
+
+  /* ── Rims — squashed ellipses simulate can top/bottom caps ───────── */
+  .can-rim {
+    border-radius: 50%;
+    flex-shrink: 0;
+    width: 100%;
+  }
+
+  .front-top-rim {
+    height: clamp(16px, 1.9vw, 24px);
+    position: relative;
+    background: linear-gradient(
+      180deg,
+      #c0c0c0 0%,
+      #909090 15%,
+      #686868 35%,
+      #444    60%,
+      #2a2a2a 80%,
+      #1a1a1a 100%
+    );
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+  .front-top-rim::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 10%;
+    width: 40%;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.45);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .front-bottom-rim {
+    height: clamp(13px, 1.5vw, 18px);
+    margin-top: 0;
+    position: relative;
+    background: linear-gradient(
+      180deg,
+      #c0c0c0 0%,
+      #909090 15%,
+      #686868 35%,
+      #444    60%,
+      #2a2a2a 80%,
+      #1a1a1a 100%
+    );
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+  .front-bottom-rim::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 10%;
+    width: 40%;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.45);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .back-top-rim {
+    height: clamp(13px, 1.6vw, 20px);
+    position: relative;
+    background: linear-gradient(
+      180deg,
+      #c0c0c0 0%,
+      #909090 15%,
+      #686868 35%,
+      #444    60%,
+      #2a2a2a 80%,
+      #1a1a1a 100%
+    );
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+  .back-top-rim::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 10%;
+    width: 40%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .back-bottom-rim {
+    height: clamp(10px, 1.2vw, 15px);
+    position: relative;
+    background: linear-gradient(
+      180deg,
+      #c0c0c0 0%,
+      #909090 15%,
+      #686868 35%,
+      #444    60%,
+      #2a2a2a 80%,
+      #1a1a1a 100%
+    );
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+  .back-bottom-rim::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 10%;
+    width: 40%;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.38);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* ── Can body ────────────────────────────────────────────────────── */
+  .can-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    will-change: transform;
+  }
+
+  /* Cylindrical lighting: specular highlight left-of-centre + deep shadow on right */
+  .front-body {
+    width: clamp(180px, 22vw, 280px);
+    height: clamp(459px, 55.8vw, 714px);
+    background:
+      /* specular highlight strip at ~15% from left */
+      linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.50)   0%,
+        rgba(0, 0, 0, 0.20)   10%,
+        rgba(255, 255, 255, 0.10) 16%,
+        rgba(255, 255, 255, 0.04) 26%,
+        transparent           38%,
+        transparent           68%,
+        rgba(0, 0, 0, 0.28)   82%,
+        rgba(0, 0, 0, 0.58)  100%
+      ),
+      /* metallic base — not flat matte */
+      linear-gradient(
+        to right,
+        #0e0e0e  0%,
+        #1f1f1f 20%,
+        #1c1c1c 50%,
+        #141414 80%,
+        #080808 100%
+      );
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+      0 24px 72px rgba(0, 0, 0, 0.85);
+  }
+
+  .back-body {
+    width: clamp(153px, 18.7vw, 238px);
+    height: clamp(430px, 52vw, 664px);
+    background:
+      linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.45)   0%,
+        rgba(255, 255, 255, 0.07) 15%,
+        rgba(255, 255, 255, 0.03) 26%,
+        transparent           38%,
+        transparent           70%,
+        rgba(0, 0, 0, 0.38)   88%,
+        rgba(0, 0, 0, 0.62)  100%
+      ),
+      linear-gradient(
+        to right,
+        #0a0a0a  0%,
+        #181818 22%,
+        #151515 50%,
+        #0e0e0e 80%,
+        #060606 100%
+      );
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75);
+  }
+
+  /* ── Front can label content ─────────────────────────────────────── */
+  .can-banner {
+    width: 100%;
+    padding: 8px 0;
+    background: rgba(0, 0, 0, 0.72);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: "MonsterFont", "VCRosdNEUE", sans-serif;
+    font-size: clamp(12px, 1.4vw, 17px);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+    text-align: center;
+    font-variant: small-caps;
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .can-m-zone {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: clamp(10px, 1.3vw, 20px) clamp(14px, 1.8vw, 24px);
+    min-height: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .can-m {
+    width: 84%;
+    height: auto;
+    filter: drop-shadow(0 0 18px rgba(0, 220, 50, 0.72));
+  }
+
+  /* caffeineaddict — large, fills most of can width */
+  .can-brand {
+    font-family: "MonsterFont", "VCRosdNEUE", sans-serif;
+    font-size: clamp(18px, 2vw, 26px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff;
+    text-align: center;
+    width: 100%;
+    padding: 0 6px clamp(4px, 0.45vw, 6px);
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* RAY GOH — smaller, NOT italic, Barlow Condensed 700, green */
+  .can-person {
+    font-family: "Barlow Condensed", sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: clamp(14px, 1.5vw, 19px);
+    color: #00dc32;
+    text-align: center;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding-bottom: clamp(6px, 0.7vw, 10px);
+    text-shadow: 0 0 10px rgba(0, 220, 50, 0.65);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .can-strip {
+    width: 100%;
+    height: clamp(10px, 1.1vw, 14px);
+    background: linear-gradient(180deg,
+      #00ff44 0%,
+      #00DC32 40%,
+      #009922 70%,
+      #006614 100%
+    );
+    flex-shrink: 0;
+    box-shadow: 0 0 12px rgba(0, 220, 50, 0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+    border-radius: 0 0 4px 4px;
+    margin: 0;
+  }
+
+  /* ── Back can — dark nutrition label ─────────────────────────────── */
+  .nutrition {
+    padding: clamp(8px, 0.85vw, 11px) clamp(9px, 0.95vw, 13px);
+    background: transparent;   /* let can-body dark gradient show */
+    color: rgba(255, 255, 255, 0.88);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5px;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+  }
+
+  .nutr-head {
+    font-family: "MonsterFont", sans-serif;
+    font-size: clamp(13px, 1.4vw, 18px);
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1;
+    padding-bottom: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .nutr-rule {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    width: 100%;
+    flex-shrink: 0;
+  }
+  .nutr-rule.thick {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.4);
+  }
+  .nutr-rule.thin {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .nutr-serving {
+    font-family: "Share Tech Mono", monospace;
+    font-size: clamp(8px, 0.85vw, 11px);
+    color: rgba(255, 255, 255, 0.4);
+    padding: 1px 0;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .nutr-row {
+    font-family: "Share Tech Mono", monospace;
+    font-size: clamp(10px, 1.1vw, 14px);
+    color: rgba(255, 255, 255, 0.82);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1px 0;
+    gap: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .nutr-row span {
+    white-space: nowrap;
+  }
+  .nutr-row.bold {
+    font-size: clamp(11px, 1.2vw, 15px);
+    font-weight: 900;
+    color: #fff;
+  }
+  .nutr-row.nutr-warn {
+    color: #ff5555;
+  }
+
+  .nutr-hl {
+    font-size: clamp(11px, 1.2vw, 15px);
+    font-weight: 900;
+    color: #fff;
+  }
+
+  .nutr-check {
+    color: #00dc32;
+    font-weight: bold;
+  }
+
+  .nutr-footnote {
+    font-family: "Share Tech Mono", monospace;
+    font-size: clamp(7px, 0.65vw, 9px);
+    color: rgba(255, 255, 255, 0.28);
+    text-align: center;
+    white-space: nowrap;
+    margin-top: auto;
+    padding-top: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ── Glow pool beneath each can ──────────────────────────────────── */
+  .can-glow {
+    width: clamp(90px, 9vw, 130px);
+    height: clamp(16px, 1.6vw, 22px);
+    border-radius: 50%;
+    background: #00dc32;
+    filter: blur(18px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    margin-top: clamp(-10px, -1.1vw, -14px);
+    flex-shrink: 0;
+  }
+  .can-wrapper:hover .can-glow {
+    opacity: 0.52;
+  }
+
+  /* ── Selector bracket ────────────────────────────────────────────── */
+  .can-selector {
+    font-family: "Share Tech Mono", monospace;
+    font-size: clamp(12px, 1.1vw, 15px);
+    color: #00dc32;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    margin-top: 8px;
+    text-shadow: 0 0 6px rgba(0, 220, 50, 0.7);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .can-wrapper:hover .can-selector {
+    opacity: 1;
+  }
+
+  /* ── Info panel under [ main ] — hover-revealed, can never moves ─── */
+  .can-panel {
+    width: clamp(180px, 22vw, 280px);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      max-height 0.35s ease,
+      opacity 0.25s ease,
+      padding 0.25s ease;
+    background: rgba(0, 220, 50, 0.05);
+    border: 1px solid rgba(0, 220, 50, 0.2);
+    border-radius: 4px;
+    margin-top: 6px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+  .can-wrapper:hover .can-panel {
+    max-height: 160px;
+    opacity: 1;
+    padding: 10px 14px;
+  }
+
+  /* ── About me blurb ─────────────────────────────────────────────── */
+  .hero-about {
+    font-family: "Share Tech Mono", monospace;
+    font-size: clamp(10px, 1.1vw, 14px);
+    color: rgba(255, 255, 255, 0.58);
+    text-align: center;
+    line-height: 1.75;
+    margin: 0;
+    max-width: 38ch;
+    word-break: break-word;
+  }
+
+  /* ── Hero subtitle (QUOTE line) ─────────────────────────────────── */
+  .hero-subtitle {
+    font-family: "Share Tech Mono", monospace;
+    font-size: clamp(11px, 1.6vw, 20px);
+    font-weight: bold;
+    color: #00dc32;
+    text-shadow: 0 0 8px rgba(0, 220, 50, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    line-height: 1.4;
+    text-align: center;
+    margin: 0;
+    word-break: break-word;
+  }
+
+  .panel-line {
+    font-family: "Share Tech Mono", monospace;
+    font-size: clamp(13px, 1.4vw, 16px);
+    color: #00dc32;
+    text-shadow: 0 0 8px rgba(0, 220, 50, 0.5);
+    letter-spacing: 0.04em;
+    margin: 0 0 8px;
+  }
+
+  .panel-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .panel-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 3px 0;
+    font-family: "Share Tech Mono", monospace;
+    font-size: clamp(12px, 1.2vw, 14px);
+  }
+  .pr-label {
+    color: rgba(255, 255, 255, 0.38);
+    white-space: nowrap;
+  }
+  .pr-val {
+    color: rgba(255, 255, 255, 0.85);
+    text-align: right;
+  }
+  .pr-green {
+    color: #00dc32;
+  }
+
 </style>
