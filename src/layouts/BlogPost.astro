@@ -4,41 +4,475 @@ import FormattedDate from "@/components/Date.astro";
 import Layout from "@/layouts/Layout.astro";
 
 type Props = CollectionEntry<"blog">["data"];
-
 const { title, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
 <Layout>
-  <article class="pb-10 grid place-items-center grid-cols-1">
-    <div class="w-full grid place-items-center my-10 px-10 overflow-x-hidden">
-      {
-        heroImage && (
-          <img
-            src={heroImage}
-            alt="hero-image"
-            class="rounded-lg border border-monster/30"
-          />
-        )
-      }
-    </div>
-    <div
-      class="prose !max-w-[90vw] overflow-x-hidden !break-words prose-invert prose-img:rounded-lg prose-img:scale-90 prose-hr:border-monster/40 prose-a:text-monster prose-a:no-underline hover:prose-a:underline prose-headings:font-monster prose-headings:uppercase prose-headings:tracking-widest prose-code:text-monster prose-code:bg-surface px-4 md:px-0 md:max-w-4xl"
-    >
-      <div>
-        <div class="font-mono text-monster/70 text-sm uppercase tracking-widest">
-          <FormattedDate date={pubDate} />
-          {
-            updatedDate && (
-              <div class="text-white/50 mt-1">
-                Last updated: <FormattedDate date={updatedDate} />
-              </div>
-            )
-          }
+  <div class="bp-wrapper">
+    <div class="bp-grid" id="bp-grid">
+
+      <!-- ── Left: sticky TOC sidebar ─────────────────────────────── -->
+      <!--
+        hidden by default — JS removes the attribute when headings are found.
+        If no headings exist the grid collapses to 1fr via JS.
+        Astro MDX / markdown adds IDs to headings automatically via rehype-slug.
+        If IDs are missing, add rehype-slug to the Astro config as a rehype plugin.
+      -->
+      <aside class="bp-toc-aside" id="bp-toc-aside" aria-label="Table of contents" hidden>
+        <p class="bp-toc-label">[ CONTENTS ]</p>
+        <div class="bp-box">
+          <div class="bp-box-bar">
+            <div class="bp-dot" style="background:rgba(0,220,50,0.7)"></div>
+            <div class="bp-dot" style="background:rgba(0,220,50,0.4)"></div>
+            <div class="bp-dot" style="background:rgba(0,220,50,0.2)"></div>
+          </div>
+          <ul id="bp-toc-list" class="bp-toc-list"></ul>
         </div>
-        <h1 class="font-monster uppercase tracking-widest mt-4">{title}</h1>
-        <hr class="border-monster/40 my-6" />
-      </div>
-      <slot />
+      </aside>
+
+      <!-- ── Right: article ───────────────────────────────────────── -->
+      <article class="bp-article">
+
+        {heroImage && (
+          <img src={heroImage} alt="" class="bp-hero-img" />
+        )}
+
+        <header class="bp-header">
+          <div class="bp-dateline">
+            <FormattedDate date={pubDate} />
+            {updatedDate && (
+              <span class="bp-updated">
+                Updated: <FormattedDate date={updatedDate} />
+              </span>
+            )}
+          </div>
+          <h1 class="bp-title">{title}</h1>
+          <hr class="bp-rule" />
+        </header>
+
+        <div class="bp-box">
+          <div class="bp-box-bar">
+            <div class="bp-dot" style="background:rgba(0,220,50,0.7)"></div>
+            <div class="bp-dot" style="background:rgba(0,220,50,0.4)"></div>
+            <div class="bp-dot" style="background:rgba(0,220,50,0.2)"></div>
+          </div>
+          <div class="bp-content" id="bp-content">
+            <slot />
+          </div>
+        </div>
+
+      </article>
     </div>
-  </article>
+  </div>
 </Layout>
+
+<script is:inline>
+(function () {
+  var _obs = null;
+
+  function init() {
+    /* Disconnect any observer from a previous View Transitions navigation */
+    if (_obs) { _obs.disconnect(); _obs = null; }
+
+    var content  = document.getElementById('bp-content');
+    var tocList  = document.getElementById('bp-toc-list');
+    var aside    = document.getElementById('bp-toc-aside');
+    var grid     = document.getElementById('bp-grid');
+    if (!content || !tocList) return;
+
+    /* Collect h2 + h3 that have IDs (Astro adds these via rehype-slug) */
+    var headings = Array.from(content.querySelectorAll('h2[id], h3[id]'));
+
+    if (headings.length === 0) {
+      /* No navigable headings — hide sidebar and collapse grid to 1 column */
+      if (aside) aside.hidden = true;
+      if (grid)  grid.style.gridTemplateColumns = '1fr';
+      return;
+    }
+
+    /* Show sidebar */
+    if (aside) aside.removeAttribute('hidden');
+
+    /* ── Build TOC list ─────────────────────────────────────── */
+    tocList.innerHTML = '';
+    headings.forEach(function (h) {
+      var li = document.createElement('li');
+      var a  = document.createElement('a');
+      a.href      = '#' + h.id;
+      a.className = h.tagName === 'H2'
+        ? 'bp-toc-link bp-toc-h2'
+        : 'bp-toc-link bp-toc-h3';
+      a.textContent = h.textContent.trim();
+
+      /* Smooth scroll with prefers-reduced-motion fallback */
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var target = document.getElementById(h.id);
+        if (!target) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          target.scrollIntoView();
+        } else {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+
+      li.appendChild(a);
+      tocList.appendChild(li);
+    });
+
+    /* ── IntersectionObserver — active section ──────────────── */
+    var allLinks = Array.from(tocList.querySelectorAll('.bp-toc-link'));
+
+    function setActive(id) {
+      allLinks.forEach(function (link) {
+        link.classList.toggle('toc-active', link.getAttribute('href') === '#' + id);
+      });
+    }
+
+    _obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, {
+      threshold: 0.6,
+      rootMargin: '-10% 0px -60% 0px'
+    });
+
+    headings.forEach(function (h) { _obs.observe(h); });
+  }
+
+  document.addEventListener('astro:page-load', init);
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
+<style is:global>
+  /*
+   * All classes below are scoped to BlogPost.astro output via the bp- prefix.
+   * is:global is required to style <slot /> content (rendered outside
+   * the component scope). No styles here affect pages outside blog posts.
+   *
+   * New classes added (for conflict audit):
+   *   bp-wrapper, bp-grid, bp-toc-aside, bp-toc-label, bp-toc-list,
+   *   bp-toc-link, bp-toc-h2, bp-toc-h3, toc-active,
+   *   bp-article, bp-hero-img, bp-header, bp-dateline, bp-updated,
+   *   bp-title, bp-rule, bp-content, bp-box, bp-box-bar, bp-dot
+   */
+
+  /* ── Shared translucent green box ───────────────────────────────── */
+  .bp-box {
+    background: rgba(0, 220, 50, 0.05);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(0, 220, 50, 0.25);
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .bp-box-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 220, 50, 0.08);
+    border-bottom: 1px solid rgba(0, 220, 50, 0.2);
+  }
+
+  .bp-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Page wrapper ────────────────────────────────────────────────── */
+  .bp-wrapper {
+    width: 100%;
+    padding: 2rem 1.5rem 5rem;
+    box-sizing: border-box;
+  }
+
+  /* ── Two-column grid ─────────────────────────────────────────────── */
+  .bp-grid {
+    display: grid;
+    grid-template-columns: clamp(160px, 18vw, 220px) 1fr;
+    gap: clamp(2rem, 4vw, 5rem);
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  /* Single-column on mobile — TOC moves above content, non-sticky */
+  @media (max-width: 767px) {
+    .bp-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .bp-toc-aside {
+      position: static !important;
+      max-height: none !important;
+      overflow-y: visible !important;
+    }
+  }
+
+  /* ── TOC sidebar ─────────────────────────────────────────────────── */
+  .bp-toc-aside {
+    position: sticky;
+    top: 5rem;
+    align-self: start;
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .bp-toc-aside::-webkit-scrollbar { display: none; }
+
+  .bp-toc-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(9px, 0.9vw, 11px);
+    color: rgba(0, 220, 50, 0.6);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0 0 0.75rem 0;
+    padding: 0;
+    line-height: 1.4;
+  }
+
+  /* TOC list sits inside .bp-box — add padding there */
+  .bp-toc-aside .bp-box .bp-toc-list {
+    list-style: none;
+    padding: 0.5rem 0.75rem 0.75rem;
+    margin: 0;
+    /* left border on the box replaces the old sidebar left-rule */
+    border-left: none;
+  }
+
+  .bp-toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Base link — both h2 and h3 share these */
+  .bp-toc-link {
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    text-decoration: none;
+    line-height: 1.6;
+    padding: 0.15rem 0.5rem;
+    border-left: 2px solid transparent;
+    margin-left: 0;
+    transition: color 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  /* H2 in TOC: brighter, full font size */
+  .bp-toc-h2 {
+    font-size: clamp(11px, 1vw, 13px);
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  /* H3 in TOC: indented, smaller, dimmer */
+  .bp-toc-h3 {
+    font-size: clamp(10px, 0.9vw, 12px);
+    color: rgba(255, 255, 255, 0.45);
+    padding-left: calc(1rem + 0.5rem); /* 1rem indent + base 0.5rem */
+  }
+
+  .bp-toc-link:hover {
+    color: #00dc32;
+  }
+
+  /*
+   * Active h2: 2px green left border pulled flush with the box's left border.
+   * Links have list padding-left: 0.75rem + link padding-left: 0.5rem = 1.25rem from box edge.
+   *   active: margin-left (-0.75rem) + border (2px) + padding-left (1.25rem - 2px) = 1.25rem ✓
+   */
+  .bp-toc-h2.toc-active {
+    color: #00dc32;
+    border-left: 2px solid #00dc32;
+    margin-left: -0.75rem;
+    padding-left: calc(1.25rem - 2px);
+  }
+
+  /*
+   * Active h3: h3 has extra 1rem indent on top of h2.
+   *   normal: 0.75rem (list) + 1rem (h3 indent) + 0.5rem (link) = 2.25rem
+   *   active: -0.75rem + 2px + (2.25rem - 2px) = 2.25rem ✓
+   */
+  .bp-toc-h3.toc-active {
+    color: #00dc32;
+    border-left: 2px solid #00dc32;
+    margin-left: -0.75rem;
+    padding-left: calc(2.25rem - 2px);
+  }
+
+  /* ── Article column ──────────────────────────────────────────────── */
+  .bp-article {
+    min-width: 0; /* prevent grid blowout from wide content */
+    overflow-x: hidden;
+  }
+
+  .bp-hero-img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(0, 220, 50, 0.3);
+    margin-bottom: 2rem;
+  }
+
+  .bp-header {
+    margin-bottom: 2rem;
+  }
+
+  .bp-dateline {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(11px, 1vw, 13px);
+    color: rgba(0, 220, 50, 0.7);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .bp-updated {
+    display: block;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9em;
+    margin-top: 0.2rem;
+    text-transform: none;
+  }
+
+  .bp-title {
+    font-family: 'MonsterFont', 'Share Tech Mono', sans-serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.15;
+    margin: 0.5rem 0 1rem;
+  }
+
+  .bp-rule {
+    border: none;
+    border-top: 1px solid rgba(0, 220, 50, 0.4);
+    margin: 0;
+  }
+
+  /* ── Article content typography ──────────────────────────────────── */
+  .bp-content {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(13px, 1.1vw, 15px);
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.75);
+    min-width: 0;
+    padding: 1.5rem;
+  }
+
+  .bp-content h2 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: #00dc32;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+    margin: 2.5rem 0 0.75rem;
+  }
+
+  .bp-content h3 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1.35;
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  .bp-content h4,
+  .bp-content h5,
+  .bp-content h6 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 700;
+    margin: 1.25rem 0 0.4rem;
+  }
+
+  .bp-content p  { margin: 0 0 1rem; }
+
+  .bp-content a  { color: #00dc32; text-decoration: none; }
+  .bp-content a:hover { text-decoration: underline; }
+
+  .bp-content strong { color: #fff; font-weight: 700; }
+  .bp-content em     { color: rgba(255,255,255,0.65); font-style: italic; }
+
+  .bp-content ul,
+  .bp-content ol { padding-left: 1.5rem; margin: 0.5rem 0 1rem; }
+  .bp-content li { margin: 0.25rem 0; }
+  .bp-content ul li::marker { color: #00dc32; }
+  .bp-content ol li::marker { color: #00dc32; }
+
+  .bp-content blockquote {
+    border-left: 3px solid rgba(0, 220, 50, 0.5);
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: rgba(255,255,255,0.5);
+    font-style: italic;
+  }
+
+  .bp-content hr {
+    border: none;
+    border-top: 1px solid rgba(0, 220, 50, 0.2);
+    margin: 1.5rem 0;
+  }
+
+  .bp-content img {
+    border-radius: 0.5rem;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0.75rem auto;
+  }
+
+  /* ── Code (preserved from existing style) ────────────────────────── */
+  .bp-content code {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.88em;
+    color: #00dc32;
+    background: #1a1a1a;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+  }
+
+  .bp-content pre {
+    background: #111;
+    border: 1px solid rgba(0, 220, 50, 0.2);
+    border-radius: 0.375rem;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+  .bp-content pre code {
+    background: transparent;
+    padding: 0;
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* ── Tables ──────────────────────────────────────────────────────── */
+  .bp-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9em;
+  }
+  .bp-content th {
+    color: #00dc32;
+    border-bottom: 1px solid rgba(0, 220, 50, 0.35);
+    padding: 0.4rem 0.75rem;
+    text-align: left;
+    font-weight: 700;
+  }
+  .bp-content td {
+    padding: 0.35rem 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+</style>

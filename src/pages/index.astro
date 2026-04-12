@@ -29,7 +29,7 @@ const posts = (await getCollection("blog")).sort(
       }
     </div>
   </Section>
-  <Section title="Technologies I Know" full_screen={false} className={"bg-surface/30"}>
+  <Section title="Technologies I Know" full_screen={false}>
     <div class="w-full flex flex-wrap gap-6 justify-center px-3">
       {
         KNOWN_TECH.map((group) => (
