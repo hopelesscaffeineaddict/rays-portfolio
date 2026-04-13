@@ -15,7 +15,7 @@ const posts = (await getCollection("blog")).sort(
 <Layout title="Ray's Personal Website">
   <CanLoader />
   <Hero />
-  <Section title="My Posts">
+  <Section title="Blog">
     <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
       {
         posts.map((post) => (
@@ -29,7 +29,7 @@ const posts = (await getCollection("blog")).sort(
       }
     </div>
   </Section>
-  <Section title="Technologies I Know" full_screen={false}>
+  <Section title="Tech Stack" full_screen={false}>
     <div class="w-full flex flex-wrap gap-6 justify-center px-3">
       {
         KNOWN_TECH.map((group) => (

@@ -5,12 +5,12 @@ export const SITE_DESCRIPTION =
 
 export const KNOWN_TECH = [
   {
-    category: "Security",
+    category: "CTFs",
     items: ["Web", "Pwn", "Rev",]
   },
   {
     category: "Tools",
-    items: ["Wireshark", "Splunk", "Burp Suite", "Binary Ninja", "IDA Pro"]
+    items: ["Wireshark", "Splunk", "ELK", "LogRhythm", "Burp Suite", "Binary Ninja", "IDA Pro"]
   },
   {
     category: "Languages",
@@ -23,9 +23,7 @@ export const KNOWN_TECH = [
 ];
 
 export const ABOUT_ME =
-  `sup, I'm ray! I'm a security analyst and CS student in Australia! I'm really interested in digital forensics and threat intelligence, especially in the context of games. It's also my third attempt at making a website :,)
-
-`.trim();
+  `hey, i'm ray! I'm a security analyst and CS student based in Australia, currently obsessed with digital forensics, threat intelligence, and the cool overlap between security and games. this is also my fourth attempt at a website :,)`.trim();
 export const GITHUB_USERNAME = "hopelesscaffeineaddict";
 export const QUOTE = "Security Analyst, Gamer, and CS Student";
 

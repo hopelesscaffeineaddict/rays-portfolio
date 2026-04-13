@@ -60,19 +60,10 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
         <div class="can-glow"></div>
         <div class="can-selector">[ main ]</div>
         <div class="can-panel">
-          <p class="panel-line">Security Analyst · CS Student · AU</p>
           <div class="panel-rows">
-            <div class="panel-row">
-              <span class="pr-label">Specialty</span>
-              <span class="pr-val">DFIR · Threat Intel</span>
-            </div>
             <div class="panel-row">
               <span class="pr-label">Status</span>
               <span class="pr-val pr-green">Actively Caffeinated</span>
-            </div>
-            <div class="panel-row">
-              <span class="pr-label">Hobbies</span>
-              <span class="pr-val">Gaming · CTF · Homelab</span>
             </div>
           </div>
         </div>
@@ -595,7 +586,7 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
     text-transform: uppercase;
     opacity: 0;
     transition: opacity 0.2s ease;
-    margin-top: 8px;
+    margin-top: 16px;
     text-shadow: 0 0 6px rgba(0, 220, 50, 0.7);
     flex-shrink: 0;
     white-space: nowrap;
@@ -632,18 +623,19 @@ import { SITE_TITLE, DISPLAY_NAME, QUOTE, ABOUT_ME } from "@/consts";
   /* ── About me blurb ──────────────────────────────────────────────── */
   .hero-about {
     font-family: "Share Tech Mono", monospace;
-    font-size: clamp(10px, 1.1vw, 14px);
-    color: rgba(255, 255, 255, 0.58);
+    font-size: clamp(10px, 1.1vw, 16px);
+    color: rgba(255, 255, 255, 0.80);
     text-align: center;
     line-height: 1.75;
     margin: 0;
-    max-width: 38ch;
+    max-width: 50ch;
     word-break: break-word;
   }
 
   /* ── Hero title — fluid type, never forces horizontal scroll ─────── */
   .hero-title {
     font-size: clamp(1.5rem, 4vw, 4.5rem);
+    text-align: center;
   }
 
   /* ── Hero subtitle ───────────────────────────────────────────────── */
