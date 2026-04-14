@@ -1,119 +1,369 @@
-<h1 align="center">Token</h1>
-<h2 align="center">Minimal Astro + Tailwind CSS Starter</h2>
+# caffeineaddict — Ray Goh's Portfolio
 
-<p align="center">
-    <img alt="hero" width="450" src="public/image.png" />
-</p>
+Personal portfolio and blog for Ray Goh (handle: `caffeineaddict`). Built with **Astro 5**, **Tailwind CSS v3**, and deployed to **Cloudflare Workers** as a fully static site. Monster Energy–themed aesthetic: deep black background, `#00DC32` neon green accents, and a dual-can hero section.
 
-> [!NOTE]
->
-> `token-template` is a modern and minimalistic Astro + Tailwind CSS starter designed for developers and creators. With a sleek black-and-white terminal-inspired design, it features support for Markdown (MD), MDX, RSS feeds, sitemaps, and fully static content, making it perfect for personal portfolios and blogs.
+---
 
-## 🌟 Features
-
-> **token-template** features intro:
-
-- **Minimalist Design** – Black-and-white terminal-inspired aesthetics with custom fonts.
-- **Astro + Tailwind CSS** – Built using Astro and styled with Tailwind CSS for easy customization.
-- **Content Support** – Write blog posts or documentation in Markdown (MD) and MDX.
-- **Static and Fast** – Fully static content optimized for performance.
-
-## 💻 Installation
-
-> [!TIP]
-> Remember to update [`src/consts.ts`](https://github.com/ArnavK-09/token-template/blob/main/src/consts.ts)
-
-###### terminal
+## Quick Start
 
 ```bash
-# Clone the repository
-git clone https://github.com/ArnavK-09/token-template.git my-portfolio
-cd my-portfolio
-
-# Install dependencies
 npm install
-
-# Run the development server
-npm run dev
+npm run dev        # Dev server at http://localhost:4321
+npm run build      # Production build → dist/
+npm run preview    # Preview the production build locally
+npm run fmt        # Format all files with Prettier
 ```
 
-## 📷 Screenshots
+---
 
-> Here's a working and expected screenshot of **token-template**
+## Project Structure
 
-| Landing Page                              |
-| ----------------------------------------- |
-| ![Demo](/public/screenshot.png) |
-
-| [Lighthouse Results](https://pagespeed.web.dev/analysis/https-token-template-deno-dev/o4lgrcn8pd?form_factor=desktop)                              |
-| ----------------------------------------- |
-| ![results](/public/lighthouse.png) |
+```
+rays-portfolio/
+├── public/
+│   ├── fonts/                  # Custom fonts (monster.woff2, monster.ttf, VCRosdNEUE.ttf)
+│   ├── icons/                  # SVG icons (monster_energy_v2.svg, monster-m.svg)
+│   ├── blog-assets/            # Images used in blog posts
+│   ├── resume.pdf              # Linked from nav
+│   ├── _headers                # Cloudflare static headers config
+│   └── robots.txt
+├── src/
+│   ├── components/             # Reusable Astro components
+│   ├── content/blog/           # Markdown/MDX blog posts
+│   ├── layouts/                # Page layout wrappers
+│   ├── pages/                  # File-based routing
+│   ├── styles/
+│   │   └── global.css          # Font faces, scrollbar, scanline, selection
+│   ├── consts.ts               # All site-wide content/config
+│   ├── content.config.ts       # Blog collection schema
+│   └── middleware.ts           # Edge security (TTP detection + headers)
+├── astro.config.mjs
+├── tailwind.config.mjs
+└── tsconfig.json
+```
 
 ---
 
-## 💻 Contributing
+## Configuration — `src/consts.ts`
 
-> [!TIP]  
-> We welcome contributions to improve **token-template**! If you have suggestions, bug fixes, or new feature ideas, follow these steps:
+**This is the primary file to edit for content changes.** All personal info, nav links, and tech stack live here.
 
-1. **Fork the Repository**  
-   Click the **Fork** button at the top-right of the repo page.
+| Export | Type | Description |
+|---|---|---|
+| `SITE_TITLE` | `string` | Site title and logo text — currently `"caffeineaddict"` |
+| `DISPLAY_NAME` | `string` | Real name shown on the front can — `"ray goh"` |
+| `SITE_DESCRIPTION` | `string` | OG/meta description |
+| `ABOUT_ME` | `string` | Bio paragraph shown in the About Me section on the homepage |
+| `QUOTE` | `string` | One-liner imported in some components (hero subtitle now hardcoded, but this is still exported) |
+| `GITHUB_USERNAME` | `string` | Used in nav link generation |
+| `KNOWN_TECH` | `Array<{category, items[]}>` | Tech stack grouped by category, rendered as pill badges on the homepage |
+| `NAV_LINKS` | `Array<{name, href}>` | Navigation links rendered in the Navbar |
 
-2. **Clone Your Fork**  
-   Clone the repo locally:
+**To change the tech stack:** edit the `KNOWN_TECH` array — each entry is `{ category: "Security", items: ["Web", "Pwn"] }`.
 
-   ```bash
-   git clone https://github.com/ArnavK-09/token-template.git
-   ```
-
-3. **Create a Branch**  
-   Create a new branch for your changes:
-
-   ```bash
-   git checkout -b your-feature-branch
-   ```
-
-4. **Make Changes**  
-   Implement your changes (bug fixes, features, etc.).
-
-5. **Commit and Push**  
-   Commit your changes and push the branch:
-
-   ```bash
-   git commit -m "feat(scope): description"
-   git push origin your-feature-branch
-   ```
-
-6. **Open a Pull Request**  
-   Open a PR with a detailed description of your changes.
-
-7. **Collaborate and Merge**  
-   The maintainers will review your PR, request changes if needed, and merge it once approved.
-
-## 🙋‍♂️ Issues
-
-Found a bug or need help? Please create an issue on the [GitHub repository](https://github.com/ArnavK-09/token-template/issues) with a detailed description.
-
-## 👤 Author
-
-<table>
-  <tbody>
-    <tr>
-        <td align="center" valign="top" width="14.28%"><a href="https://github.com/ArnavK-09"><img src="https://github.com/ArnavK-09.png?s=100" width="130px;" alt="Arnav K"/></a><br /><a href="https://github.com/ArnavK-09"<h4><b>Arnav K</b></h3></a></td>
-    </tr>
-  </tbody>
-</table>
+**To change nav links:** edit `NAV_LINKS`. Each entry is `{ name: "Blog", href: "/blog" }`. External links work fine.
 
 ---
 
-<h2 align="center">📄 License</h2>
+## Pages & Routes
 
-<p align="center">
-<strong>token-template</strong> is licensed under the <code>ISC</code> License. See the <a href="https://github.com/ArnavK-09/token-template/blob/main/LICENSE">LICENSE</a> file for more details.
-</p>
+| File | Route | Description |
+|---|---|---|
+| `src/pages/index.astro` | `/` | Homepage — Hero + Blog posts + Tech stack + About Me |
+| `src/pages/blog/index.astro` | `/blog` | Blog post listing, all posts sorted newest-first |
+| `src/pages/blog/[...slug].astro` | `/blog/[slug]` | Dynamic route — one page per blog post |
+| `src/pages/rss.xml.js` | `/rss.xml` | Auto-generated RSS feed |
+
+Sitemap at `/sitemap-index.xml` is auto-generated by `@astrojs/sitemap` on every build.
 
 ---
 
-<p align="center">
-    <strong>🌟 If you find this project helpful, please give it a star on GitHub! 🌟</strong>
-</p>
+## Blog Posts — `src/content/blog/`
+
+Create a `.md` or `.mdx` file in this folder. Frontmatter schema (enforced by Zod in `src/content.config.ts`):
+
+```yaml
+---
+title: "Post Title"          # required
+description: "Short blurb"  # required — shown on card and in meta
+pubDate: 2025-10-03          # required — used for sorting and display
+updatedDate: 2025-10-10      # optional — shows "Last updated" line
+heroImage: /blog-assets/img.png  # optional — shown at top of post
+---
+```
+
+Markdown content goes below the frontmatter. MDX is supported (you can import Astro/React components). Code blocks are syntax-highlighted using the **GitHub Dark High Contrast** Shiki theme.
+
+**Current posts:**
+
+| Slug | Title |
+|---|---|
+| `csa-internship` | Reflecting on my Summer 2025 SG internship (CSA) |
+| `homelab-setup` | Ray's homelab setup guide |
+| `internship-hell` | Summer 2025 internship hell — cool stats |
+| `portfolio-hosting` | Cloud activities: how I hosted this website |
+
+---
+
+## Layouts
+
+### `src/layouts/Layout.astro`
+Base shell used by every page. Imports and renders:
+- `BaseHead` — all `<head>` content
+- `CrackOpen` — page-load intro animation
+- `BinaryBackground` — fullscreen canvas animation
+- `Navbar` — fixed top nav
+- `Footer`
+
+The `<main>` and `<footer>` have `position: relative; z-index: 1` so they stack above the fixed canvas (z-index 0).
+
+**Props:** `title` (string, optional), `description` (string, optional)
+
+### `src/layouts/BlogPost.astro`
+Wraps individual blog articles inside `Layout`. Renders the hero image (if set), publication date, updated date, post title, and then the post content via `<slot />`.
+
+Applies Tailwind Typography (`prose prose-invert`) with Monster-themed overrides: green links, MonsterFont headings, dark code backgrounds.
+
+**Props:** `title`, `pubDate`, `updatedDate?`, `heroImage?`
+
+---
+
+## Components
+
+### `BaseHead.astro`
+Everything inside `<head>`. Handles:
+- Charset, viewport, canonical URL
+- OG and Twitter card meta tags
+- Font preloads: `monster.woff2`, Barlow Condensed, Share Tech Mono (Google Fonts)
+- Favicon
+- Sitemap link
+- View Transitions (`ClientRouter`) for page animations
+- Imports `global.css`
+
+**Props:** `title`, `description`, `image` (defaults to `/image.jpg`)
+
+---
+
+### `Navbar.astro`
+Fixed top navigation bar (`z-index: 9999`). Uses `SITE_TITLE` as the logo and `NAV_LINKS` from `consts.ts` for links.
+
+- Active link is detected from `Astro.url.pathname` — highlighted with green underline
+- Logo loses its glow (`text-shadow`) when scroll position > 100px — implemented via inline `<script>`
+- Layout: stacks vertically on mobile, horizontal flex on desktop with `/` separators between links
+- Background: `bg-monster-dark/90 backdrop-blur-sm` with a green bottom border
+
+---
+
+### `Hero.astro`
+Full-screen landing section (`min-h-screen`). Two-column CSS grid: left text + right dual cans.
+
+**Left column:**
+- `<SITE_TITLE />` heading in MonsterFont
+- Subtitle: "Security Analyst . Gamer . CS Student" in Share Tech Mono green
+- No info box (it was moved to under the front can)
+
+**Right column — dual cans:**
+
+| Element | Class | Description |
+|---|---|---|
+| Front can | `.front-wrapper` / `.front-unit` | Full-size can with Monster M logo |
+| Back can | `.back-wrapper` / `.back-unit` | Stats/skills nutrition label |
+| Top rim | `.front-top-rim` / `.back-top-rim` | Metallic gradient ellipse cap |
+| Can body | `.front-body` / `.back-body` | Cylindrical lighting via layered gradients |
+| Green strip | `.can-strip` | Sits between body and bottom rim, metallic green gradient |
+| Bottom rim | `.front-bottom-rim` / `.back-bottom-rim` | Metallic gradient ellipse cap |
+
+**Front can body content** (inside `.front-body`):
+- `.can-banner` — "UNLEASH THE CODE" in MonsterFont
+- `.can-m-zone` — Monster Energy logo SVG (`/icons/monster_energy_v2.svg`)
+- `.can-brand` — "caffeineaddict" in MonsterFont
+- `.can-person` — `DISPLAY_NAME` in Barlow Condensed, green
+
+**Back can body content** (inside `.back-body`):
+- `.nutrition` container with rows styled like a nutrition label
+- Heading "Technical Skills" in MonsterFont
+- Rows pulled from `nutr-row` divs — edit the HTML directly to update skills
+
+**Hover behaviour:**
+- Both cans: `scale(1.04)` zoom on hover via inline JS (no rotation)
+- Back can: `z-index: 3` on hover so it jumps in front of the front can
+- `.can-glow` — blurred green ellipse beneath each can, fades in on hover
+- `.can-selector` — `[ main ]` / `[ stats ]` label, fades in on hover
+- `.can-panel` — green info box slides down below `[ main ]` on hover (max-height transition)
+
+**Key responsive sizing** (all `clamp(min, fluid, max)`):
+
+| Element | Width | Height |
+|---|---|---|
+| Front body | `clamp(180px, 22vw, 280px)` | `clamp(459px, 55.8vw, 714px)` |
+| Back body | `clamp(153px, 18.7vw, 238px)` | `clamp(430px, 52vw, 664px)` |
+| Back wrapper overlap | `margin-left: clamp(-36px, -4.4vw, -56px)` | — |
+
+---
+
+### `Section.astro`
+Reusable section block used on the homepage. Renders a `< Title />` heading in MonsterFont with a green underline divider, then a `<slot />` for content.
+
+**Props:**
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `title` | `string` | `"Section"` | Section heading text. Also becomes the element's `id` (lowercased). |
+| `full_screen` | `boolean` | `true` | If true, applies `min-h-screen` |
+| `className` | `string` | `""` | Extra Tailwind classes for the section background/spacing |
+
+---
+
+### `BlogPostCard.astro`
+Terminal-style card for blog post listings. Shown on `/` and `/blog`.
+
+**Props:** `slug`, `title`, `excerpt`, `date` (Date object)
+
+Renders a fake terminal window (traffic-light dots, title bar), post title with `❯` prefix, date in brackets, one-line excerpt. "Read more →" link animates on hover.
+
+---
+
+### `Breadcrumb.astro`
+Small pill badge for tech stack items. Used inside `KNOWN_TECH` mapping on the homepage.
+
+**Props:** `title`
+
+Green-tinted pill with hover brightening. Font: Share Tech Mono, uppercase.
+
+---
+
+### `BinaryBackground.astro`
+Fullscreen `<canvas>` Matrix-style falling binary animation. Fixed, `z-index: 0`, `pointer-events: none`, `opacity: 0.35`.
+
+**How it works:**
+- Each column has an independent drop-head that descends one step per tick
+- Every tick: fill canvas with `rgba(0,0,0,0.04)` (fade trail), then draw one character per column at the drop-head position
+- Characters: `"0"` or `"1"` at `rgba(0,220,50,0.85)`, with 15% chance of white flicker `rgba(255,255,255,0.6)`
+- Only redraws every 3rd frame (~20fps) to cut GPU cost by 66%
+- Pauses draw when tab is hidden (`document.hidden`), loop still ticks
+- Resize is debounced 200ms, reinitialises columns
+
+**`prefers-reduced-motion`:** draws a single static grid at low opacity, no animation loop.
+
+To adjust visibility: change `opacity` in the `<style>` block (currently `0.35`). To adjust density: change `COL_W` (column width, currently `14px`) or `FONT_SIZE` (currently `13px`).
+
+---
+
+### `CrackOpen.astro`
+Page-load intro animation. Plays once per browser session (`sessionStorage`).
+
+**Sequence (~900ms total):**
+1. Full-screen black overlay appears (server-rendered, visible before hydration)
+2. `0ms` — green line (`#00DC32`) scales from 0→100% width across screen centre (300ms)
+3. `300ms` — top and bottom halves slide off screen (`translateY`) over 400ms
+4. On `animationend` — overlay set to `display: none`, `sessionStorage.crackPlayed = 1`
+
+On revisit: inline `<script>` adds `data-skip` attribute before paint → CSS `[data-skip] { display: none }` hides it instantly, zero layout cost.
+
+**`prefers-reduced-motion`:** overlay fades out in 200ms instead.
+
+---
+
+### `Footer.astro`
+Simple bottom bar with copyright year and site title. Green top border, dark background. Contains a decorative binary string at low opacity.
+
+---
+
+### `Date.astro`
+Formats a `Date` object into a `<time>` element. Output format: `MMM D, YYYY` (e.g. "Oct 3, 2025").
+
+**Props:** `date` (Date)
+
+---
+
+## Design System
+
+### Colors (Tailwind)
+
+| Token | Hex | Usage |
+|---|---|---|
+| `monster` | `#00dc32` | Primary accent — text, borders, glows |
+| `monster-dark` | `#080808` | Page background |
+| `surface` | `#1a1a1a` | Cards, panels |
+| `surface-2` | `#2a2a2a` | Slightly lighter surfaces |
+
+### Fonts
+
+| Token | Family | Used for |
+|---|---|---|
+| `font-monster` | MonsterFont → VCRosdNEUE → sans | Headings, can labels, section titles |
+| `font-mono` | Share Tech Mono → VCRosdNEUE → mono | Body text, UI, code |
+| `font-barlow` | Barlow Condensed (Google) | `RAY GOH` name on front can |
+| `font-vcr` | VCRosdNEUE | Fallback mono |
+
+Font files in `public/fonts/`. Loaded via `@font-face` in `global.css` with `font-display: swap`.
+
+### Glow Shadows (Tailwind)
+
+| Class | Value |
+|---|---|
+| `shadow-monster` | `0 0 20px rgba(0,220,50,0.4)` |
+| `shadow-monster-sm` | `0 0 8px rgba(0,220,50,0.3)` |
+| `shadow-monster-lg` | `0 0 50px rgba(0,220,50,0.6)` |
+
+### Global CSS Effects (`src/styles/global.css`)
+
+- **Scanline overlay** — `body::after`, fixed, full-screen, `pointer-events: none`, `z-index: 9998`. Repeating gradient simulating CRT scanlines every 4px at 9% opacity.
+- **Custom scrollbar** — 5px wide, `#0d0d0d` track, `#00dc32` thumb with glow. Firefox via `scrollbar-color`, Webkit via `::-webkit-scrollbar-*`.
+- **Text selection** — `background: #00dc32; color: #080808`
+
+---
+
+## Security Middleware — `src/middleware.ts`
+
+Runs on every request at the Cloudflare Workers edge. Does two things:
+
+### 1. TTP Detection
+
+Checks the request URL and `User-Agent` against three rules:
+
+| Rule | Pattern | Severity | MITRE Technique |
+|---|---|---|---|
+| SQL Injection | `/(union\s+select|'\s*or\s*|;\s*drop)/i` | **high** | T1190 |
+| Path Traversal | `/(\.\.\/|\.\.\\|%2e%2e)/i` | medium | T1083 |
+| Scanner UA | `/(sqlmap|nikto|nmap)/i` | low | T1595 |
+
+High-severity hits return `403 "Blocked by Edge Sentinel"`. All hits are logged to console with URI, IP (from `cf-connecting-ip`), and timestamp.
+
+> Note: the site uses `output: "static"` so middleware only runs when hosted on a runtime (Cloudflare Workers). It has no effect during `astro preview`.
+
+### 2. Security Headers
+
+Added to every response:
+
+| Header | Value |
+|---|---|
+| `X-Frame-Options` | `DENY` |
+| `X-Content-Type-Options` | `nosniff` |
+| `Strict-Transport-Security` | `max-age=31536000; includeSubDomains` |
+| `Content-Security-Policy` | `default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'` |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` |
+
+---
+
+## Deployment
+
+The site builds to static HTML (`output: "static"` in `astro.config.mjs`) and is deployed to **Cloudflare Workers**. The `public/_headers` file can be used to set additional Cloudflare-level response headers.
+
+```bash
+npm run build    # outputs to dist/
+# then deploy dist/ to Cloudflare Workers or any static host
+```
+
+Site URL is set in `astro.config.mjs` → `site` field. Update this if the deployment URL changes, as it affects the sitemap and canonical URLs.
+
+---
+
+## Path Alias
+
+`@/` maps to `src/` — configured in `tsconfig.json`. Use it everywhere:
+
+```ts
+import Hero from "@/components/Hero.astro";
+import { SITE_TITLE } from "@/consts";
+```

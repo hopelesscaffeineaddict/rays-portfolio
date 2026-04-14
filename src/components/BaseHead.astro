@@ -26,7 +26,22 @@ import { ABOUT_ME, SITE_TITLE } from "@/consts";
 <meta name="generator" content={Astro.generator} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 
+<!-- Google Fonts: Barlow Condensed + Share Tech Mono -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700&family=Share+Tech+Mono&display=swap"
+  rel="stylesheet"
+/>
+
 <!-- Font preloads -->
+<link
+  rel="preload"
+  href="/fonts/monster.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
 <link
   rel="preload"
   href="/fonts/VCRosdNEUE.ttf"

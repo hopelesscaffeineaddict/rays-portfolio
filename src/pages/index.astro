@@ -5,18 +5,79 @@ import Breadcrumb from "@/components/Breadcrumb.astro";
 import Section from "@/components/Section.astro";
 import BlogPostCard from "@/components/BlogPostCard.astro";
 import Layout from "@/layouts/Layout.astro";
-import { KNOWN_TECH, ABOUT_ME } from "@/consts";
+import CanLoader from "@/components/CanLoader.astro";
+import { KNOWN_TECH } from "@/consts";
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
 
 <Layout title="Ray's Personal Website">
+  <CanLoader />
   <Hero />
-  <Section
-    title="My Posts"
-    className={"bg-gradient-to-b from-black/70 from-[5%] to-black via-black"}
-  >
+  <section class="px-4 py-10 w-screen !overflow-x-hidden">
+    <div class="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
+
+      <!-- Stuff I Like -->
+      <div class="border border-monster/25 rounded-lg p-6 hover:border-monster/50 transition-all" style="background: rgba(0,220,50,0.07);">
+        <h3 class="font-monster text-2xl md:text-3xl uppercase tracking-widest text-monster mb-1" style="text-shadow: 0 0 12px rgba(0,220,50,0.3);">
+          stuff i like
+        </h3>
+        <div class="mt-2 mb-5 h-px bg-monster" style="box-shadow: 0 0 8px #00dc32;"></div>
+        <div class="flex flex-col gap-4 font-mono">
+          <div>
+            <span class="text-monster uppercase tracking-wider text-sm font-bold">games</span>
+            <p class="text-white/70 text-sm mt-1 leading-relaxed">mainly gacha/rhythm (honkai star rail, genshin impact, maimai, taiko). used to be in the top 50 for osu!taiko locally in covid but i quit because it was too sweaty.</p>
+          </div>
+          <div>
+            <span class="text-monster uppercase tracking-wider text-sm font-bold">alt fashion</span>
+            <p class="text-white/70 text-sm mt-1 leading-relaxed">i love expressing myself through fashion. i lean towards edgy/emo/y2k, though i do have some gothic pieces i seldom wear. i don't like adhering to a specific style since i think it limits creativity, and i simply go for what i think looks cool on me. did i mention i have 10cm platforms?</p>
+          </div>
+          <div>
+            <span class="text-monster uppercase tracking-wider text-sm font-bold">caffeine</span>
+            <p class="text-white/70 text-sm mt-1 leading-relaxed">i run on monster energy and coffee. i'd survive entirely on monster energy if it weren't so expensive.</p>
+          </div>
+          <div>
+            <span class="text-monster uppercase tracking-wider text-sm font-bold">gym</span>
+            <p class="text-white/70 text-sm mt-1 leading-relaxed">best advice i can give - if you're having a bad day, go lift. hard to feel sorry for yourself when the bar's about to drop on you :3</p>
+          </div>
+          <div>
+            <span class="text-monster uppercase tracking-wider text-sm font-bold">baking bread</span>
+            <p class="text-white/70 text-sm mt-1 leading-relaxed">specifically sourdough. my starter is named bob, he's been alive for over 1.5 years, and i'm very proud of him.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- What I Wanna Do This Year -->
+      <div class="border border-monster/25 rounded-lg p-6 hover:border-monster/50 transition-all" style="background: rgba(0,220,50,0.07);">
+        <h3 class="font-monster text-2xl md:text-3xl uppercase tracking-widest text-monster mb-1" style="text-shadow: 0 0 12px rgba(0,220,50,0.3);">
+          what i wanna do this year
+        </h3>
+        <div class="mt-2 mb-5 h-px bg-monster" style="box-shadow: 0 0 8px #00dc32;"></div>
+        <div class="flex flex-col gap-4 font-mono">
+          <div>
+            <span class="text-monster uppercase tracking-wider text-sm font-bold">android security</span>
+            <p class="text-white/70 text-sm mt-1 leading-relaxed">getting deeper into mobile security and how apps (mis)behave.</p>
+          </div>
+          <div>
+            <span class="text-monster uppercase tracking-wider text-sm font-bold">malware analysis</span>
+            <p class="text-white/70 text-sm mt-1 leading-relaxed">not just studying it, actually pulling it apart. reversing, understanding how it works, the whole thing.</p>
+          </div>
+          <div>
+            <span class="text-monster uppercase tracking-wider text-sm font-bold">rev</span>
+            <p class="text-white/70 text-sm mt-1 leading-relaxed">getting better at reverse engineering in general. still a long way to go, but i really wanna reverse a malware!</p>
+          </div>
+          <div>
+            <span class="text-monster uppercase tracking-wider text-sm font-bold">oscp</span>
+            <p class="text-white/70 text-sm mt-1 leading-relaxed">maybe. we'll see. (okay yes, probably)</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <Section title="Blog">
     <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
       {
         posts.map((post) => (
@@ -30,28 +91,22 @@ const posts = (await getCollection("blog")).sort(
       }
     </div>
   </Section>
-  <Section title="Technologies I Know" full_screen={false}>
+  <Section title="Tech Stack" full_screen={false}>
     <div class="w-full flex flex-wrap gap-6 justify-center px-3">
-      {KNOWN_TECH.map((group) => (
-        <div class="bg-gray-800 rounded-xl p-4 shadow-lg min-w-[200px]">
-          <h3 class="text-lg font-semibold mb-2">{group.category}</h3>
-          <div class="flex flex-wrap gap-2">
-            {group.items.map((tech) => (
-              <Breadcrumb title={tech} />
-            ))}
+      {
+        KNOWN_TECH.map((group) => (
+          <div class="bg-surface border border-monster/20 rounded-lg p-4 shadow-lg min-w-[200px] hover:border-monster/50 transition-all">
+            <h3 class="font-monster text-lg uppercase tracking-widest text-monster mb-3">
+              {group.category}
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              {group.items.map((tech) => (
+                <Breadcrumb title={tech} />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
-  </Section>
-
-  <Section title="About Me">
-    <div class="w-full grid place-items-center">
-      <div
-        class="max-w-4xl text-xl md:text-lg opacity-90 text-center justify-evenly"
-      >
-        <p>{ABOUT_ME}</p>
-      </div>
+        ))
+      }
     </div>
   </Section>
 </Layout>

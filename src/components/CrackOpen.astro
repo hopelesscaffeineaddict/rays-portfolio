@@ -1,0 +1,112 @@
+<!-- sessionStorage check: adds data-skip before paint if already played -->
+<script is:inline>
+  if (sessionStorage.getItem('crackPlayed')) {
+    document.currentScript.parentElement.setAttribute('data-skip', '');
+  }
+</script>
+
+<div id="crack-overlay">
+  <div class="crack-top"></div>
+  <div class="crack-line"></div>
+  <div class="crack-bottom"></div>
+</div>
+
+<script is:inline>
+  (function () {
+    var overlay = document.getElementById('crack-overlay');
+    if (!overlay) return;
+    // Hide when both halves finish sliding off
+    var done = 0;
+    function onEnd(e) {
+      if (e.animationName === 'slide-top' || e.animationName === 'slide-bottom') {
+        done++;
+        if (done >= 2) {
+          overlay.style.display = 'none';
+          sessionStorage.setItem('crackPlayed', '1');
+        }
+      }
+    }
+    overlay.addEventListener('animationend', onEnd);
+  })();
+</script>
+
+<style>
+  /* Skip entirely if already played this session */
+  #crack-overlay[data-skip] {
+    display: none;
+  }
+
+  #crack-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Top half — black, slides up after line finishes */
+  .crack-top {
+    flex: 1;
+    background: #000;
+    animation: slide-top 400ms ease-in 300ms forwards;
+  }
+
+  /* The green tab-pull line — scales from left to right */
+  .crack-line {
+    width: 100%;
+    height: 2px;
+    background: #00DC32;
+    transform-origin: left center;
+    box-shadow: 0 0 8px rgba(0, 220, 50, 0.8);
+    animation: pull-line 300ms ease-out forwards;
+  }
+
+  /* Bottom half — black, slides down after line finishes */
+  .crack-bottom {
+    flex: 1;
+    background: #000;
+    animation: slide-bottom 400ms ease-in 300ms forwards;
+  }
+
+  @keyframes pull-line {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  @keyframes slide-top {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-100%); }
+  }
+
+  @keyframes slide-bottom {
+    from { transform: translateY(0); }
+    to   { transform: translateY(100%); }
+  }
+
+  /* Reduced motion: skip the sequence, just fade out quickly */
+  @media (prefers-reduced-motion: reduce) {
+    .crack-top,
+    .crack-bottom {
+      animation: none;
+      opacity: 0;
+    }
+    .crack-line {
+      animation: fade-out-line 200ms ease forwards;
+    }
+    #crack-overlay {
+      animation: fade-out-overlay 200ms ease forwards;
+      pointer-events: none;
+    }
+  }
+
+  @keyframes fade-out-line {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+
+  @keyframes fade-out-overlay {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+</style>
