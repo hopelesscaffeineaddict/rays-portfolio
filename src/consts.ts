@@ -1,4 +1,4 @@
-export const SITE_TITLE = "caffeineaddict — Ray Goh";
+export const SITE_TITLE = "caffeineaddict";
 export const DISPLAY_NAME = "ray goh";
 export const SITE_DESCRIPTION =
   `Ray's blog — security analyst and CS student based in Australia, writing about cybersecurity, digital forensics, CTFs, and whatever else is on my mind.`.trim();
