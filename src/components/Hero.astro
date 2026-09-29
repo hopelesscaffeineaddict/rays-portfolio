@@ -1,6 +1,6 @@
 ---
 import { getEntry } from "astro:content";
-import { SITE_TITLE, DISPLAY_NAME, TAGLINE, INTRO } from "@/consts";
+import { SITE_TITLE, DISPLAY_NAME, INTRO } from "@/consts";
 
 const currently = (await getEntry("site", "currently"))?.data.items ?? [];
 ---
@@ -21,8 +21,6 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
     </h1>
 
     <p class="hero-handle">&lt;{SITE_TITLE} /&gt;</p>
-
-    <p class="hero-subtitle">{TAGLINE}</p>
 
     <p class="hero-about">{INTRO}</p>
 
@@ -643,20 +641,6 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
   .hero-title {
     font-size: clamp(1.5rem, 4vw, 4.5rem);
     text-align: center;
-  }
-
-  /* ── Hero subtitle ───────────────────────────────────────────────── */
-  .hero-subtitle {
-    font-family: "Share Tech Mono", monospace;
-    font-size: clamp(11px, 1.6vw, 20px);
-    font-weight: bold;
-    color: #00dc32;
-    text-shadow: 0 0 8px rgba(0, 220, 50, 0.45);
-    letter-spacing: 0.06em;
-    line-height: 1.4;
-    text-align: center;
-    margin: 0;
-    word-break: break-word;
   }
 
   .panel-line {

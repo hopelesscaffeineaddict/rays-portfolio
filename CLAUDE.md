@@ -40,7 +40,7 @@ Landing (`pages/index.astro`) composes `Hero` → `LatestWriting`. The hero's ba
 - **`Section.astro`**: section with a JSX-style `<Title />` heading and a `<slot />`
 - **`WritingListItem.astro` / `WritingList.astro`**: post rows used on `/`, `/writing`, category pages and `/talks`. Thumbnail renders only if `thumbnail` is set.
 - **`CategoryTabs.astro`**: All/Research/Musings/Talks/Projects links, generated from the categories config
-- **`Hero.astro`**: left: name, `<caffeineaddict />` handle, tagline, intro; right: front can plus back can listing the "currently" rows
+- **`Hero.astro`**: left: name, `<caffeineaddict />` handle, intro; right: front can plus back can listing the "currently" rows
 - **`Navbar.astro`**: fixed top nav driven by `NAV_LINKS`
 - **`BaseHead.astro`**: all `<head>` content: OG/Twitter meta, font preload, sitemap, View Transitions `ClientRouter`
 

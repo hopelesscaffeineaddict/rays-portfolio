@@ -4,10 +4,8 @@ export const SITE_DESCRIPTION =
   "Ray Goh (caffeineaddict). Incident responder based in Singapore, writing about EDRs, anticheats, and whatever else i'm nerding out on.";
 
 // Landing page copy. Edit here.
-export const TAGLINE =
-  "incident responder. thinking out loud on EDRs, anticheats, and whatever else i'm nerding out on.";
 export const INTRO =
-  "hey, i'm ray! i'm an incident responder based in singapore, currently nerding out on EDRs, anticheats, and what's between them. this site is where i think out loud about the work, drop the occasional deep dive, and keep track of what i'm figuring out along the way.";
+  "hey, i'm ray! i'm an incident responder in singapore, nerding out on EDRs, anticheats, and the space between them. this site is where i think out loud, drop the occasional deep dive, and keep track of what i'm figuring out along the way.";
 
 // About page copy.
 export const BIO =
