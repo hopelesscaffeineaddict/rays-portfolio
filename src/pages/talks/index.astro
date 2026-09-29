@@ -1,0 +1,16 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Section from "@/components/Section.astro";
+import WritingList from "@/components/WritingList.astro";
+import { getPosts } from "@/lib/writing";
+
+const posts = await getPosts("talks");
+---
+
+<Layout title="Talks | caffeineaddict">
+  <Section title="Talks">
+    <div class="w-full max-w-4xl mx-auto">
+      <WritingList posts={posts} empty="talks coming soon." />
+    </div>
+  </Section>
+</Layout>

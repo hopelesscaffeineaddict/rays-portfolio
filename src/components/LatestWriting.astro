@@ -1,0 +1,14 @@
+---
+import Section from "@/components/Section.astro";
+import WritingList from "@/components/WritingList.astro";
+import { getPosts } from "@/lib/writing";
+
+const posts = (await getPosts()).slice(0, 3);
+---
+
+<Section title="Latest Writing">
+  <div class="w-full max-w-4xl mx-auto flex flex-col gap-6">
+    <WritingList posts={posts} />
+    <a href="/writing" class="font-mono text-monster underline underline-offset-4 hover:underline-offset-2 transition-all self-end">→ all writing</a>
+  </div>
+</Section>

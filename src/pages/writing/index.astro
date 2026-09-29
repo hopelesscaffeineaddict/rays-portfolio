@@ -1,0 +1,18 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Section from "@/components/Section.astro";
+import CategoryTabs from "@/components/CategoryTabs.astro";
+import WritingList from "@/components/WritingList.astro";
+import { getPosts } from "@/lib/writing";
+
+const posts = await getPosts();
+---
+
+<Layout title="Writing | caffeineaddict">
+  <Section title="Writing">
+    <div class="w-full max-w-4xl mx-auto flex flex-col gap-8">
+      <CategoryTabs />
+      <WritingList posts={posts} />
+    </div>
+  </Section>
+</Layout>

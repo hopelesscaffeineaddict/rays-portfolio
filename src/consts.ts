@@ -1,36 +1,28 @@
 export const SITE_TITLE = "caffeineaddict";
-export const DISPLAY_NAME = "ray goh";
+export const DISPLAY_NAME = "Ray Goh";
 export const SITE_DESCRIPTION =
-  `Ray's blog — security analyst and CS student based in Australia, writing about cybersecurity, digital forensics, CTFs, and whatever else is on my mind.`.trim();
+  "Ray Goh (caffeineaddict). Incident responder based in Singapore, writing about EDRs, anticheats, and whatever else i'm nerding out on.";
 
-export const KNOWN_TECH = [
-  {
-    category: "CTFs",
-    items: ["Web", "Pwn", "Rev",]
-  },
-  {
-    category: "Tools",
-    items: ["Wireshark", "Splunk", "ELK", "LogRhythm", "Burp Suite", "Binary Ninja", "IDA Pro"]
-  },
-  {
-    category: "Languages",
-    items: ["Python", "SQL", "C", "Bash", "PowerShell"]
-  },
-  {
-    category: "DFIR",
-    items: ["Volatility", "Autopsy"]
-  }
-];
+// Landing page copy. Edit here.
+export const TAGLINE =
+  "incident responder. thinking out loud on EDRs, anticheats, and whatever else i'm nerding out on.";
+export const INTRO =
+  "hey, i'm ray! i'm an incident responder based in singapore, currently nerding out on EDRs, anticheats, and what's between them. this site is where i think out loud about the work, drop the occasional deep dive, and keep track of what i'm figuring out along the way.";
 
-export const ABOUT_ME =
-  `hey, i'm ray! I'm a security analyst and CS student based in Australia, currently obsessed with digital forensics, threat intelligence, and the cool overlap between security and games. this is also my fourth attempt at a website :,)`.trim();
+// About page copy.
+export const BIO =
+  "i'm ray, an incident responder based in singapore. i spend my time on windows endpoint internals, EDRs, and the seam between malware and anticheats. i speak at conferences when they let me, and write things down here so i remember what i figured out.";
+
 export const GITHUB_USERNAME = "hopelesscaffeineaddict";
-export const QUOTE = "Security Analyst, Gamer, and CS Student";
+export const LINKEDIN_URL = "https://www.linkedin.com/in/ray-goh-l33t/";
+export const EMAIL = "rayneorshine03@gmail.com";
 
-export const NAV_LINKS: Array<{ title: string; href?: string; target?: string; rel?: string }> = [
-  { title: "Blog" },
-  { title: "Linkedin", href: "https://www.linkedin.com/in/ray-goh-l33t/", target: "_blank", rel: "noopener noreferrer" },
-  { title: "Github", href: "//github.com/" + GITHUB_USERNAME, target: "_blank", rel: "noopener noreferrer" },
-  { title: "Email", href: "mailto:rayneorshine03@gmail.com" },
-  { title: "Resume", href: "resume.pdf", target: "_blank", rel: "noopener noreferrer" },
+export const NAV_LINKS: Array<{ title: string; href: string; external?: boolean }> = [
+  { title: "Home", href: "/" },
+  { title: "Writing", href: "/writing" },
+  { title: "Talks", href: "/talks" },
+  { title: "About", href: "/about" },
+  { title: "LinkedIn", href: LINKEDIN_URL, external: true },
+  { title: "GitHub", href: "https://github.com/" + GITHUB_USERNAME, external: true },
+  { title: "Email", href: "mailto:" + EMAIL },
 ];

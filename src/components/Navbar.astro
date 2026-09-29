@@ -21,15 +21,11 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
       <span class="hidden md:block text-monster/40 font-mono">/</span>
       {
         links.map((link) => {
-          const href =
-            link.href ?? link.title.toLowerCase().replaceAll(" ", "-");
-          const pathname = Astro.url.pathname.replace(
-            import.meta.env.BASE_URL,
-            "",
-          );
-          const subpath = pathname.match(/[^\/]+/g);
+          const path = Astro.url.pathname;
           const isActive =
-            href === pathname || href === "/" + (subpath?.[0] || "");
+            !link.external &&
+            !link.href.startsWith("mailto:") &&
+            (link.href === "/" ? path === "/" : path.startsWith(link.href));
           return (
             <>
               <a
@@ -40,9 +36,9 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
                     "text-white/70": !isActive,
                   },
                 ]}
-                href={link.href ?? `/${href}`}
-                target={link.target}
-                rel={link.rel}
+                href={link.href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
               >
                 {link.title}
               </a>

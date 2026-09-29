@@ -1,0 +1,21 @@
+---
+import WritingListItem from "@/components/WritingListItem.astro";
+import type { Post } from "@/lib/writing";
+
+interface Props {
+  posts: Post[];
+  empty?: string;
+}
+
+const { posts, empty = "nothing here yet." } = Astro.props;
+---
+
+{
+  posts.length === 0 ? (
+    <p class="font-mono text-white/50 text-center">{empty}</p>
+  ) : (
+    <div class="w-full flex flex-col gap-4">
+      {posts.map((post) => <WritingListItem post={post} />)}
+    </div>
+  )
+}

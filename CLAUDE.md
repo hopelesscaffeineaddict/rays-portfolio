@@ -17,25 +17,33 @@ npm run fmt       # Format all files with Prettier
 
 ### Where to make content changes
 
-Almost all personal content lives in **`src/consts.ts`** — this is the first place to look when updating bio, skills, nav links, quotes, or site metadata. Blog posts are Markdown/MDX files in `src/content/blog/` with frontmatter enforced by `src/content.config.ts` (required: `title`, `description`, `pubDate`; optional: `updatedDate`, `heroImage`).
+- **Copy and links** (tagline, intro, bio, nav, socials): `src/consts.ts`.
+- **"Currently" panel** on the landing page: `src/content/site/currently.md` (label/value pairs in frontmatter).
+- **Categories**: `src/config/categories.ts` (single source of truth; adding one is a one-line change).
+- **Posts**: Markdown/MDX in `src/content/writing/`; the filename is the URL slug (`/writing/<slug>`, flat, never nested under category). Schema in `src/content.config.ts`: required `title`, `date`, `category`, `description`; optional `thumbnail`, `lang`, `tags`, `draft`, `updatedDate`, and talk-only `venue`, `slides_url`, `video_url`, `abstract`. `draft: true` hides a post everywhere (use `getPosts()` from `src/lib/writing.ts`, never `getCollection` directly). Slugs must not equal a category id.
+
+### Routes
+
+`/` landing, `/writing` (all), `/writing/<category>` and `/writing/<slug>` (both served by `pages/writing/[slug].astro`), `/talks` (talks only), `/about`. Old `/blog/*` redirects to `/writing/*` via `public/_redirects` and `redirects` in `astro.config.mjs`.
 
 ### Layout hierarchy
 
 ```
-Layout.astro          ← base shell (BaseHead + Navbar + Footer)
-└── BlogPost.astro    ← blog article wrapper (uses Layout + Tailwind prose)
+Layout.astro           ← base shell (BaseHead + Navbar + Footer)
+└── WritingPost.astro  ← post wrapper (TOC, talk metadata, prev/next within category)
 ```
 
-Pages (`src/pages/`) compose layouts and components. The homepage (`pages/index.astro`) pulls blog posts via `getCollection("blog")` and renders them alongside the tech stack and about sections.
+Landing (`pages/index.astro`) composes `Hero` → `CurrentlyPanel` (with `Can`) → `LatestWriting`.
 
 ### Component roles
 
-- **`Section.astro`** — reusable full/partial-height section with a JSX-style `<Title />` heading and a `<slot />`
-- **`BlogPostCard.astro`** — terminal-styled card (fake traffic-light dots) used on both `/` and `/blog`
-- **`Breadcrumb.astro`** — pill badge, used for tech stack items in `KNOWN_TECH`
-- **`Hero.astro`** — full-screen intro with CSS typewriter animation and JS-driven binary background
-- **`Navbar.astro`** — fixed top nav; logo style inverts on scroll via inline JS; active link derived from `Astro.url.pathname`
-- **`BaseHead.astro`** — all `<head>` content: OG/Twitter meta, font preload, sitemap, View Transitions `ClientRouter`
+- **`Section.astro`**: section with a JSX-style `<Title />` heading and a `<slot />`
+- **`WritingListItem.astro` / `WritingList.astro`**: post rows used on `/`, `/writing`, category pages and `/talks`. Thumbnail renders only if `thumbnail` is set.
+- **`CategoryTabs.astro`**: All/Research/Musings/Talks/Projects links, generated from the categories config
+- **`Can.astro`**: decorative Monster can mascot (no information on it)
+- **`Hero.astro`**: name, `<caffeineaddict />` handle, tagline, intro
+- **`Navbar.astro`**: fixed top nav driven by `NAV_LINKS`
+- **`BaseHead.astro`**: all `<head>` content: OG/Twitter meta, font preload, sitemap, View Transitions `ClientRouter`
 
 ### Styling conventions
 
@@ -60,4 +68,4 @@ This runs at the edge on Cloudflare Workers. Note: the site is `output: "static"
 
 ### RSS & Sitemap
 
-Auto-generated at build time: `/rss.xml` (via `src/pages/rss.xml.js`) and `/sitemap-index.xml` (via `@astrojs/sitemap`). Both pull from the `blog` content collection.
+Auto-generated at build time: `/rss.xml` (via `src/pages/rss.xml.js`) and `/sitemap-index.xml` (via `@astrojs/sitemap`). Both pull from the `writing` content collection (drafts excluded).

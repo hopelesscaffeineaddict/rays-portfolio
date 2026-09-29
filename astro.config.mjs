@@ -5,7 +5,11 @@ import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
-  output: "static",   
+  output: "static",
+  redirects: {
+    "/blog": "/writing",
+    "/blog/portfolio-makeover": "/writing/portfolio-makeover",
+  },   
   site: "https://rays-portfolio.rayneorshine03.workers.dev",   
   integrations: [mdx(), sitemap(), tailwind()],
   markdown: {

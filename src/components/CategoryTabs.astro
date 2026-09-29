@@ -1,0 +1,31 @@
+---
+import { CATEGORIES } from "@/config/categories";
+
+interface Props {
+  active?: string;
+}
+
+const { active } = Astro.props;
+const tabs = [{ id: undefined, label: "All", href: "/writing" }].concat(
+  CATEGORIES.map((c) => ({ id: c.id as any, label: c.label, href: `/writing/${c.id}` })),
+);
+---
+
+<nav class="flex flex-wrap justify-center gap-3 font-mono uppercase tracking-widest text-sm" aria-label="Filter writing by category">
+  {
+    tabs.map((t) => (
+      <a
+        href={t.href}
+        aria-current={t.id === active ? "page" : undefined}
+        class:list={[
+          "px-3 py-1 border transition-all",
+          t.id === active
+            ? "border-monster text-monster bg-monster/10"
+            : "border-monster/25 text-white/70 hover:text-monster hover:border-monster/60",
+        ]}
+      >
+        {t.label}
+      </a>
+    ))
+  }
+</nav>

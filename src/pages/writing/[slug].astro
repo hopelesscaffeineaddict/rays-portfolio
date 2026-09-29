@@ -1,0 +1,56 @@
+---
+// Serves both category pages (/writing/research ...) and posts (/writing/<slug>).
+import { render } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import WritingPost from "@/layouts/WritingPost.astro";
+import Section from "@/components/Section.astro";
+import CategoryTabs from "@/components/CategoryTabs.astro";
+import WritingList from "@/components/WritingList.astro";
+import { CATEGORIES, getCategory } from "@/config/categories";
+import { getPosts } from "@/lib/writing";
+
+export async function getStaticPaths() {
+  const all = await getPosts();
+  const reserved = new Set<string>(CATEGORIES.map((c) => c.id));
+  const clash = all.find((p) => reserved.has(p.id));
+  if (clash) throw new Error(`Post slug "${clash.id}" collides with a category name`);
+
+  const categoryPaths = CATEGORIES.map((c) => ({
+    params: { slug: c.id },
+    props: { category: c.id, posts: all.filter((p) => p.data.category === c.id) },
+  }));
+  const postPaths = all.map((post) => {
+    // all is newest first, so the next index is the older post
+    const siblings = all.filter((p) => p.data.category === post.data.category);
+    const i = siblings.findIndex((p) => p.id === post.id);
+    return {
+      params: { slug: post.id },
+      props: { post, prev: siblings[i + 1], next: siblings[i - 1] },
+    };
+  });
+  return [...categoryPaths, ...postPaths];
+}
+
+const { category, posts, post, prev, next } = Astro.props;
+const meta = category ? getCategory(category) : undefined;
+const Content = post ? (await render(post)).Content : undefined;
+const showAbstract =
+  !!post && post.data.category === "talks" && !post.body?.trim() && !!post.data.abstract;
+---
+
+{
+  post ? (
+    <WritingPost data={post.data} prev={prev} next={next} showAbstract={showAbstract}>
+      {Content && <Content />}
+    </WritingPost>
+  ) : (
+    <Layout title={`${meta?.label} | writing`} description={meta?.blurb}>
+      <Section title={meta?.label ?? "Writing"}>
+        <div class="w-full max-w-4xl mx-auto flex flex-col gap-8">
+          <CategoryTabs active={category} />
+          <WritingList posts={posts} />
+        </div>
+      </Section>
+    </Layout>
+  )
+}

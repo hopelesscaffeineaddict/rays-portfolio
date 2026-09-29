@@ -1,7 +1,9 @@
 ---
 title: "website makeover IV"
 description: "my crazy caffeine fuelled weekend project"
-pubDate: "Apr 12 2026"
+date: 2026-04-12
+category: projects
+lang: eng
 ---
 
 ## introduction 

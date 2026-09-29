@@ -12,11 +12,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const {
   title = SITE_TITLE,
-  description = ABOUT_ME,
+  description = SITE_DESCRIPTION,
   image = "/image.jpg",
 } = Astro.props;
 import HeroImage from "@/hero.png";
-import { ABOUT_ME, SITE_TITLE } from "@/consts";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 ---
 
 <!-- Global Metadata -->

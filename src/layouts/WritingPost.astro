@@ -1,13 +1,21 @@
 ---
-import type { CollectionEntry } from "astro:content";
 import FormattedDate from "@/components/Date.astro";
 import Layout from "@/layouts/Layout.astro";
+import type { Post } from "@/lib/writing";
 
-type Props = CollectionEntry<"blog">["data"];
-const { title, pubDate, updatedDate, heroImage } = Astro.props;
+interface Props {
+  data: Post["data"];
+  /** Same-category neighbours: prev is older, next is newer. */
+  prev?: Post;
+  next?: Post;
+  /** Render the abstract as main content (talks with an empty body). */
+  showAbstract?: boolean;
+}
+const { data, prev, next, showAbstract = false } = Astro.props;
+const { title, date, updatedDate, category, tags, venue, slides_url, video_url, abstract } = data;
 ---
 
-<Layout>
+<Layout title={title} description={data.description}>
   <div class="bp-wrapper">
     <div class="bp-grid" id="bp-grid">
 
@@ -33,13 +41,10 @@ const { title, pubDate, updatedDate, heroImage } = Astro.props;
       <!-- ── Right: article ───────────────────────────────────────── -->
       <article class="bp-article">
 
-        {heroImage && (
-          <img src={heroImage} alt="" class="bp-hero-img" />
-        )}
-
         <header class="bp-header">
           <div class="bp-dateline">
-            <FormattedDate date={pubDate} />
+            <FormattedDate date={date} />
+            <span class="bp-cat">{category}</span>
             {updatedDate && (
               <span class="bp-updated">
                 Updated: <FormattedDate date={updatedDate} />
@@ -47,6 +52,16 @@ const { title, pubDate, updatedDate, heroImage } = Astro.props;
             )}
           </div>
           <h1 class="bp-title">{title}</h1>
+          {tags && tags.length > 0 && (
+            <p class="bp-tags">{tags.map((t) => `#${t}`).join(" ")}</p>
+          )}
+          {category === "talks" && (
+            <ul class="bp-talk-meta">
+              {venue && <li>venue: {venue}</li>}
+              {slides_url && <li><a href={slides_url} target="_blank" rel="noopener noreferrer">slides</a></li>}
+              {video_url && <li><a href={video_url} target="_blank" rel="noopener noreferrer">video</a></li>}
+            </ul>
+          )}
           <hr class="bp-rule" />
         </header>
 
@@ -57,9 +72,16 @@ const { title, pubDate, updatedDate, heroImage } = Astro.props;
             <div class="bp-dot" style="background:rgba(0,220,50,0.2)"></div>
           </div>
           <div class="bp-content" id="bp-content">
-            <slot />
+            {showAbstract ? <p style="white-space: pre-line">{abstract}</p> : <slot />}
           </div>
         </div>
+
+        {(prev || next) && (
+          <nav class="bp-pager" aria-label="More in this category">
+            {prev ? <a href={`/writing/${prev.id}`}>← {prev.data.title}</a> : <span />}
+            {next ? <a href={`/writing/${next.id}`}>{next.data.title} →</a> : <span />}
+          </nav>
+        )}
 
       </article>
     </div>
@@ -355,6 +377,35 @@ const { title, pubDate, updatedDate, heroImage } = Astro.props;
     border-top: 1px solid rgba(0, 220, 50, 0.4);
     margin: 0;
   }
+
+  .bp-cat {
+    margin-left: 0.75rem;
+    padding: 0.05rem 0.5rem;
+    border: 1px solid rgba(0, 220, 50, 0.5);
+    border-radius: 2px;
+  }
+  .bp-tags, .bp-talk-meta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(11px, 1vw, 13px);
+    color: rgba(255, 255, 255, 0.5);
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+  }
+  .bp-talk-meta a { color: #00dc32; }
+  .bp-pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+  }
+  .bp-pager a { color: #00dc32; text-decoration: none; }
+  .bp-pager a:hover { text-decoration: underline; }
 
   /* ── Article content typography ──────────────────────────────────── */
   .bp-content {

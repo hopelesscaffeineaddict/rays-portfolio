@@ -1,0 +1,58 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Section from "@/components/Section.astro";
+import { BIO, LINKEDIN_URL, GITHUB_USERNAME, EMAIL } from "@/consts";
+
+const likes = [
+  { label: "games", text: "mainly gacha/rhythm (honkai star rail, genshin impact, maimai, taiko). used to be in the top 50 for osu!taiko locally in covid but i quit because it was too sweaty." },
+  { label: "alt fashion", text: "i love expressing myself through fashion. i lean towards edgy/emo/y2k, though i do have some gothic pieces i seldom wear. i don't like adhering to a specific style since i think it limits creativity, and i simply go for what i think looks cool on me. did i mention i have 10cm platforms?" },
+  { label: "caffeine", text: "i run on monster energy and coffee. i'd survive entirely on monster energy if it weren't so expensive." },
+  { label: "gym", text: "best advice i can give - if you're having a bad day, go lift. hard to feel sorry for yourself when the bar's about to drop on you :3" },
+  { label: "baking bread", text: "specifically sourdough. my starter is named bob, he's been alive for over 1.5 years, and i'm very proud of him." },
+];
+const links = [
+  { label: "linkedin", href: LINKEDIN_URL },
+  { label: "github", href: `https://github.com/${GITHUB_USERNAME}` },
+  { label: "email", href: `mailto:${EMAIL}` },
+  { label: "rss", href: "/rss.xml" },
+];
+---
+
+<Layout title="About | caffeineaddict">
+  <Section title="About">
+    <div class="w-full max-w-3xl mx-auto flex flex-col gap-8 font-mono">
+      <p class="text-white/80 leading-relaxed">{BIO}</p>
+
+      <div class="flex flex-wrap gap-4">
+        {
+          links.map((l) => (
+            <a href={l.href} class="text-monster underline underline-offset-4 hover:underline-offset-2 transition-all">
+              {l.label}
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="border border-monster/25 rounded-lg p-6" style="background: rgba(0,220,50,0.07);">
+        <h2 class="font-monster text-2xl md:text-3xl uppercase tracking-widest text-monster mb-1" style="text-shadow: 0 0 12px rgba(0,220,50,0.3);">
+          stuff i like
+        </h2>
+        <div class="mt-2 mb-5 h-px bg-monster" style="box-shadow: 0 0 8px #00dc32;"></div>
+        <div class="flex flex-col gap-4">
+          {
+            likes.map((l) => (
+              <div>
+                <span class="text-monster uppercase tracking-wider text-sm font-bold">{l.label}</span>
+                <p class="text-white/70 text-sm mt-1 leading-relaxed">{l.text}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <p class="text-white/40 text-xs">
+        colophon: built with astro and tailwind, hosted on cloudflare workers, fuelled by monster.
+      </p>
+    </div>
+  </Section>
+</Layout>

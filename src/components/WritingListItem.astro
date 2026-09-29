@@ -1,0 +1,42 @@
+---
+import FormattedDate from "@/components/Date.astro";
+import type { Post } from "@/lib/writing";
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { title, date, category, description, thumbnail } = post.data;
+---
+
+<a
+  href={`/writing/${post.id}`}
+  class="group flex gap-4 items-stretch w-full bg-monster/5 backdrop-blur-sm border border-monster/25 rounded-lg p-4 transition-all duration-200 ease-in-out hover:border-monster/70 hover:shadow-monster-sm"
+>
+  {
+    thumbnail && (
+      <img
+        src={thumbnail}
+        alt=""
+        loading="lazy"
+        class="hidden sm:block shrink-0 w-28 h-20 object-cover rounded border border-monster/25"
+      />
+    )
+  }
+  <div class="min-w-0 flex-1 font-mono tracking-wider">
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mb-1">
+      <h3 class="text-lg text-white uppercase tracking-widest">
+        <span class="text-monster mr-2">❯</span>{title}
+      </h3>
+      <span
+        class="px-2 py-0.5 border border-monster/50 text-monster text-xs uppercase tracking-widest rounded-sm"
+        >{category}</span
+      >
+    </div>
+    <p class="text-monster/70 text-xs tracking-widest mb-2">
+      [<FormattedDate date={date} />]
+    </p>
+    <p class="text-white/60 text-sm">{description}</p>
+  </div>
+</a>
