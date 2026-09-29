@@ -23,3 +23,8 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 package-lock.json
+
+# editor swap/backup files
+*.swp
+*.swo
+*~
