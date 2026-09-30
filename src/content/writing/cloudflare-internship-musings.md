@@ -6,7 +6,7 @@ description: "4 months in Cloudflare's SIRT: what I learned, what I built and fa
 draft: false
 ---
 
-**tldr:** i yap about my time at Cloudflare - cool observations, problems i ran into (some solved, some very much not), and what i'm taking with me. this is NOT another "how to land a big tech internship" listicle. if you're an early career human trying to figure out what IR actually looks like on the inside, or a senior curious what a fresh face notices about the field, this is for you. maybe the real takeaway was the friends we made along the way.
+**tldr:** i yap about my time at Cloudflare - cool observations, problems i ran into (some solved, some very much not), and what i'm taking with me. this is NOT another "how to land a big tech internship" listicle. maybe the one piece was the friends we made along the way.
 
 ## part 1: getting in
 
