@@ -2,7 +2,7 @@
 title: "Cheaters Leave Footprints: Forensics of Cheats in Modern Games"
 date: 2026-05-16
 category: talks
-description: "Game cheats behave like malware. This talk walks through three samples, their forensic footprints, and where the model breaks (DMA)."
+description: "Game cheats behave like malware. This talk walks through three samples and their forensic footprints, as well as when the detection model breaks.
 venue: "BSides Tokyo 2026"
 slides_url: "/blog-assets/bsides-tokyo-2026.pdf"
 video_url: ""
