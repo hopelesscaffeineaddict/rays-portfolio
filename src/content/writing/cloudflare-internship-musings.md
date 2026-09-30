@@ -57,7 +57,7 @@ The initial pitch was simple: automate the boring middle bit, digest raw intel, 
 
 As a result, Overwatch was never fully shipped, nor was it adopted, and honestly - this failure is probably what I learned the most from, way more than if it had quietly gone into prod and I'd written a proud "here's what I built" LinkedIn post.
 
-## part 4: what i noticed from the industry (from the peanut gallery)
+## part 4: what i noticed about the industry (from the peanut gallery)
 
 Disclaimer: I'm an intern. Take this section with the appropriate grain of salt.
 
