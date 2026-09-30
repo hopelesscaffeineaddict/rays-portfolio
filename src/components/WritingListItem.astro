@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { title, date, category, description, thumbnail } = post.data;
+const { title, date, category, description, thumbnail, venue } = post.data;
 ---
 
 <a
@@ -33,6 +33,13 @@ const { title, date, category, description, thumbnail } = post.data;
         class="px-2 py-0.5 border border-monster/50 text-monster text-xs uppercase tracking-widest rounded-sm"
         >{category}</span
       >
+      {
+        venue && (
+          <span class="px-2 py-0.5 border border-white/30 text-white/70 text-xs uppercase tracking-widest rounded-sm">
+            {venue}
+          </span>
+        )
+      }
     </div>
     <p class="text-monster/70 text-xs tracking-widest mb-2">
       [<FormattedDate date={date} />]
