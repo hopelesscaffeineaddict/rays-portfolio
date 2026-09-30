@@ -26,15 +26,21 @@ const { title, date, updatedDate, category, tags, venue, slides_url, video_url, 
         Astro MDX / markdown adds IDs to headings automatically via rehype-slug.
         If IDs are missing, add rehype-slug to the Astro config as a rehype plugin.
       -->
-      <aside class="bp-toc-aside" id="bp-toc-aside" aria-label="Table of contents" hidden>
-        <p class="bp-toc-label">[ CONTENTS ]</p>
-        <div class="bp-box">
-          <div class="bp-box-bar">
-            <div class="bp-dot" style="background:rgba(0,220,50,0.7)"></div>
-            <div class="bp-dot" style="background:rgba(0,220,50,0.4)"></div>
-            <div class="bp-dot" style="background:rgba(0,220,50,0.2)"></div>
+      <aside class="bp-toc-aside" id="bp-toc-aside" aria-label="Post navigation">
+        <a class="bp-back" href={`/writing/${category}`}>
+          <span class="bp-back-arrow" aria-hidden="true">←</span>
+          <span>back to {category}</span>
+        </a>
+        <div id="bp-toc-wrap" hidden>
+          <p class="bp-toc-label">[ CONTENTS ]</p>
+          <div class="bp-box">
+            <div class="bp-box-bar">
+              <div class="bp-dot" style="background:rgba(0,220,50,0.7)"></div>
+              <div class="bp-dot" style="background:rgba(0,220,50,0.4)"></div>
+              <div class="bp-dot" style="background:rgba(0,220,50,0.2)"></div>
+            </div>
+            <ul id="bp-toc-list" class="bp-toc-list"></ul>
           </div>
-          <ul id="bp-toc-list" class="bp-toc-list"></ul>
         </div>
       </aside>
 
@@ -98,7 +104,7 @@ const { title, date, updatedDate, category, tags, venue, slides_url, video_url, 
 
     var content  = document.getElementById('bp-content');
     var tocList  = document.getElementById('bp-toc-list');
-    var aside    = document.getElementById('bp-toc-aside');
+    var aside    = document.getElementById('bp-toc-wrap');
     var grid     = document.getElementById('bp-grid');
     if (!content || !tocList) return;
 
@@ -108,7 +114,6 @@ const { title, date, updatedDate, category, tags, venue, slides_url, video_url, 
     if (headings.length === 0) {
       /* No navigable headings — hide sidebar and collapse grid to 1 column */
       if (aside) aside.hidden = true;
-      if (grid)  grid.style.gridTemplateColumns = '1fr';
       return;
     }
 
@@ -247,6 +252,35 @@ const { title, date, updatedDate, category, tags, venue, slides_url, video_url, 
     scrollbar-width: none;
   }
   .bp-toc-aside::-webkit-scrollbar { display: none; }
+
+  /* Back button: lives in the sticky sidebar so it follows the reader */
+  .bp-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    padding: 0.4rem 0.9rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(11px, 1vw, 13px);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #00dc32;
+    text-decoration: none;
+    border: 1px solid rgba(0, 220, 50, 0.4);
+    border-radius: 0.25rem;
+    background: rgba(0, 220, 50, 0.05);
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, padding-right 0.2s ease;
+  }
+  .bp-back-arrow { display: inline-block; transition: transform 0.2s ease; }
+  .bp-back:hover,
+  .bp-back:focus-visible {
+    background: #00dc32;
+    color: #080808;
+    box-shadow: 0 0 14px rgba(0, 220, 50, 0.55);
+    padding-right: 1.2rem;
+  }
+  .bp-back:hover .bp-back-arrow,
+  .bp-back:focus-visible .bp-back-arrow { transform: translateX(-5px); }
 
   .bp-toc-label {
     font-family: 'Share Tech Mono', monospace;

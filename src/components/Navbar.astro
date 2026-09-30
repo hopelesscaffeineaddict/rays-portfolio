@@ -28,20 +28,41 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
             (link.href === "/" ? path === "/" : path.startsWith(link.href));
           return (
             <>
-              <a
-                class:list={[
-                  "font-mono uppercase tracking-widest text-sm transition-all ease-in-out px-2 py-0.5 max-w-fit hover:text-monster hover:border-b hover:border-monster",
-                  {
-                    "text-monster border-b border-monster": isActive,
-                    "text-white/70": !isActive,
-                  },
-                ]}
-                href={link.href}
-                target={link.external ? "_blank" : undefined}
-                rel={link.external ? "noopener noreferrer" : undefined}
-              >
-                {link.title}
-              </a>
+              <div class="relative group">
+                <a
+                  class:list={[
+                    "font-mono uppercase tracking-widest text-sm transition-all ease-in-out px-2 py-0.5 max-w-fit hover:text-monster hover:border-b hover:border-monster",
+                    {
+                      "text-monster border-b border-monster": isActive,
+                      "text-white/70": !isActive,
+                    },
+                  ]}
+                  href={link.href}
+                  target={link.external ? "_blank" : undefined}
+                  rel={link.external ? "noopener noreferrer" : undefined}
+                >
+                  {link.title}
+                </a>
+                {link.children && (
+                  <div class="hidden md:group-hover:flex md:group-focus-within:flex absolute left-1/2 -translate-x-1/2 top-full pt-3 z-50">
+                    <ul class="flex flex-col min-w-[9rem] bg-monster-dark border border-monster/40 rounded shadow-monster-sm py-1">
+                      {link.children.map((child) => (
+                        <li>
+                          <a
+                            href={child.href}
+                            class:list={[
+                              "block px-4 py-1.5 font-mono uppercase tracking-widest text-xs transition-all hover:bg-monster/10 hover:text-monster hover:pl-5",
+                              path.startsWith(child.href) ? "text-monster" : "text-white/70",
+                            ]}
+                          >
+                            <span class="text-monster/60 mr-1">❯</span>{child.title}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
               <span class="hidden md:block text-monster/40 font-mono">/</span>
             </>
           );

@@ -1,8 +1,17 @@
+/* MonsterFont only draws letters: its digit and punctuation glyphs are blank.
+   Restrict it to A-Z/a-z and serve everything else from VCRosdNEUE. */
 @font-face {
   font-family: 'MonsterFont';
   src: url('/fonts/monster.woff2') format('woff2'),
        url('/fonts/monster.ttf') format('truetype');
   font-display: swap;
+  unicode-range: U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'MonsterFont';
+  src: url('/fonts/VCRosdNEUE.ttf') format('truetype');
+  font-display: swap;
+  unicode-range: U+0021-0040, U+005B-0060, U+007B-007E, U+00A0-00FF, U+2018-201F, U+2026;
 }
 @font-face {
   font-family: 'VCRosdNEUE';

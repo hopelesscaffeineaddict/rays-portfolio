@@ -1,3 +1,5 @@
+import { CATEGORIES } from "@/config/categories";
+
 export const SITE_TITLE = "caffeineaddict";
 export const DISPLAY_NAME = "Ray Goh";
 export const SITE_DESCRIPTION =
@@ -15,9 +17,19 @@ export const GITHUB_USERNAME = "hopelesscaffeineaddict";
 export const LINKEDIN_URL = "https://www.linkedin.com/in/ray-goh-l33t/";
 export const EMAIL = "rayneorshine03@gmail.com";
 
-export const NAV_LINKS: Array<{ title: string; href: string; external?: boolean }> = [
+export const NAV_LINKS: Array<{
+  title: string;
+  href: string;
+  external?: boolean;
+  children?: Array<{ title: string; href: string }>;
+}> = [
   { title: "Home", href: "/" },
-  { title: "Writing", href: "/writing" },
+  {
+    title: "Writing",
+    href: "/writing",
+    // dropdown, generated from the categories config
+    children: CATEGORIES.map((c) => ({ title: c.label, href: `/writing/${c.id}` })),
+  },
   { title: "Talks", href: "/talks" },
   { title: "About", href: "/about" },
   { title: "LinkedIn", href: LINKEDIN_URL, external: true },
