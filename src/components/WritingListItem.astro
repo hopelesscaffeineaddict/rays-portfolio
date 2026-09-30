@@ -29,17 +29,19 @@ const { title, date, category, description, thumbnail, venue } = post.data;
       <h3 class="text-lg text-white uppercase tracking-widest">
         <span class="text-monster mr-2">❯</span>{title}
       </h3>
-      <span
-        class="px-2 py-0.5 border border-monster/50 text-monster text-xs uppercase tracking-widest rounded-sm"
-        >{category}</span
-      >
-      {
-        venue && (
-          <span class="px-2 py-0.5 border border-white/30 text-white/70 text-xs uppercase tracking-widest rounded-sm">
-            {venue}
-          </span>
-        )
-      }
+      <div class="flex flex-wrap items-center gap-2">
+        <span
+          class="px-2 py-0.5 border border-monster/50 text-monster text-xs uppercase tracking-widest rounded-sm"
+          >{category}</span
+        >
+        {
+          venue && (
+            <span class="px-2 py-0.5 border border-white/30 text-white/70 text-xs uppercase tracking-widest rounded-sm">
+              {venue}
+            </span>
+          )
+        }
+      </div>
     </div>
     <p class="text-monster/70 text-xs tracking-widest mb-2">
       [<FormattedDate date={date} />]
