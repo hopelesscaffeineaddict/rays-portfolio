@@ -475,6 +475,29 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
     flex-shrink: 0;
     white-space: nowrap;
   }
+  /* narrow screens: both cans shrink together so the pair always fits */
+  @media (max-width: 480px) {
+    #cans-stage {
+      max-width: 100%;
+    }
+    .front-body,
+    .back-body {
+      width: min(180px, 43vw);
+      height: calc(min(180px, 43vw) * 2.55);
+    }
+  }
+
+  /* narrow screens: let a long value drop under its label instead of truncating */
+  @media (max-width: 900px) {
+    .nutrition .nutr-row {
+      flex-wrap: wrap;
+    }
+    .nutrition .nutr-val {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+    }
+  }
   .nutr-val {
     min-width: 0;
     margin-left: auto;
