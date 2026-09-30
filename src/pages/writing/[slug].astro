@@ -1,6 +1,7 @@
 ---
 // Serves both category pages (/writing/research ...) and posts (/writing/<slug>).
 import { render } from "astro:content";
+import readingTime from "reading-time";
 import Layout from "@/layouts/Layout.astro";
 import WritingPost from "@/layouts/WritingPost.astro";
 import Section from "@/components/Section.astro";
@@ -36,11 +37,15 @@ const meta = category ? getCategory(category) : undefined;
 const Content = post ? (await render(post)).Content : undefined;
 const showAbstract =
   !!post && post.data.category === "talks" && !post.body?.trim() && !!post.data.abstract;
+// Reading time of what the reader actually sees (the abstract for body-less talks)
+const readMinutes = post
+  ? Math.max(1, Math.ceil(readingTime(showAbstract ? post.data.abstract! : (post.body ?? "")).minutes))
+  : 0;
 ---
 
 {
   post ? (
-    <WritingPost data={post.data} prev={prev} next={next} showAbstract={showAbstract}>
+    <WritingPost data={post.data} prev={prev} next={next} showAbstract={showAbstract} readMinutes={readMinutes}>
       {Content && <Content />}
     </WritingPost>
   ) : (

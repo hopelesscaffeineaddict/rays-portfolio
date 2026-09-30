@@ -10,8 +10,10 @@ interface Props {
   next?: Post;
   /** Render the abstract as main content (talks with an empty body). */
   showAbstract?: boolean;
+  /** Estimated reading time in minutes. */
+  readMinutes?: number;
 }
-const { data, prev, next, showAbstract = false } = Astro.props;
+const { data, prev, next, showAbstract = false, readMinutes } = Astro.props;
 const { title, date, updatedDate, category, tags, venue, slides_url, video_url, abstract } = data;
 ---
 
@@ -58,6 +60,7 @@ const { title, date, updatedDate, category, tags, venue, slides_url, video_url, 
             )}
           </div>
           <h1 class="bp-title">{title}</h1>
+          {readMinutes && <p class="bp-readtime">~{readMinutes} min read</p>}
           {tags && tags.length > 0 && (
             <p class="bp-tags">{tags.map((t) => `#${t}`).join(" ")}</p>
           )}
@@ -417,6 +420,13 @@ const { title, date, updatedDate, category, tags, venue, slides_url, video_url, 
     padding: 0.05rem 0.5rem;
     border: 1px solid rgba(0, 220, 50, 0.5);
     border-radius: 2px;
+  }
+  .bp-readtime {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(11px, 1vw, 13px);
+    letter-spacing: 0.08em;
+    color: rgba(0, 220, 50, 0.7);
+    margin: 0 0 0.75rem;
   }
   .bp-tags, .bp-talk-meta {
     font-family: 'Share Tech Mono', monospace;
