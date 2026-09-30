@@ -2,7 +2,7 @@
 title: "musings from the other side of the window: four months in cloudflare's sirt"
 date: 2026-09-30
 category: musings
-description: "4 months in Cloudflare's SIRT: what I learned, what I built and failed to ship, and some observations from the peanut gallery."
+description: "4 months in Cloudflare's SIRT: what I learned, built, failed to ship, and some observations from the peanut gallery."
 draft: false
 ---
 
