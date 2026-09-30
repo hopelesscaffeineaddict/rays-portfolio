@@ -67,7 +67,7 @@ const { title, date, updatedDate, category, tags, venue, slides_url, video_url, 
           {category === "talks" && (
             <ul class="bp-talk-meta">
               {venue && <li>venue: {venue}</li>}
-              {slides_url && <li><a href={slides_url} target="_blank" rel="noopener noreferrer">slides</a></li>}
+              {slides_url && <li><a href={slides_url} download target="_blank" rel="noopener noreferrer">slides (pdf)</a></li>}
               {video_url && <li><a href={video_url} target="_blank" rel="noopener noreferrer">video</a></li>}
             </ul>
           )}
