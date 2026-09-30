@@ -51,10 +51,10 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
 
             <div class="can-brand">caffeineaddict</div>
             <div class="can-person">{DISPLAY_NAME}</div>
-          </div>
 
-          <div class="can-strip"></div>
-          <div class="can-rim front-bottom-rim"></div>
+            <div class="can-strip"></div>
+            <div class="can-base"></div>
+          </div>
         </div>
 
         <!-- Hover chrome — sits outside the tilting unit -->
@@ -77,7 +77,7 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
 
           <div class="can-body back-body" id="back-body">
             <div class="nutrition">
-              <div class="nutr-head">// currently</div>
+              <div class="nutr-head">currently</div>
               <div class="nutr-rule thick"></div>
               {currently.map((item) => (
                 <>
@@ -88,9 +88,10 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
                 </>
               ))}
             </div>
-          </div>
 
-          <div class="can-rim back-bottom-rim"></div>
+            <div class="can-strip"></div>
+            <div class="can-base"></div>
+          </div>
         </div>
 
         <div class="can-glow"></div>
@@ -158,6 +159,7 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
   }
 
   .back-wrapper {
+    --overlap: clamp(22px, 2.4vw, 34px);
     z-index: 1;
     /*
      * Fixed: was clamp(-36px, -4.4vw, -56px) which always resolved to -36px
@@ -165,7 +167,7 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
      * MIN(-36) > MAX(-56) the result was always -36px regardless of viewport.
      * Correct direction: clamp(-56px, -4.4vw, -36px) scales overlap with width.
      */
-    margin-left: clamp(-56px, -4.4vw, -36px);
+    margin-left: calc(var(--overlap) * -1);
   }
 
   .back-wrapper:hover {
@@ -183,116 +185,52 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
     transform-origin: bottom center;
   }
 
-  /* ── Rims ────────────────────────────────────────────────────────── */
+  /* ── Shape ───────────────────────────────────────────────────────────
+   * --ry is half the height of the lid ellipse. The lid overlaps the top of the
+   * body by --ry, and the body's bottom edge is an ellipse of the same radius,
+   * so the silhouette reads as a cylinder. The green band and the silver base
+   * are children of the body: the body's curved bottom clips them, and a mask
+   * gives their top edges the same curve, so they wrap the can.
+   */
+  .front-unit {
+    --ry: clamp(8px, 0.95vw, 12px);
+    --band: clamp(12px, 1.4vw, 18px);
+    --b: clamp(5px, 0.6vw, 8px);
+  }
+  .back-unit {
+    --ry: clamp(7px, 0.8vw, 10px);
+    --band: clamp(10px, 1.2vw, 15px);
+    --b: clamp(4px, 0.5vw, 7px);
+  }
+
   .can-rim {
-    border-radius: 50%;
+    position: relative;
+    z-index: 3;
     flex-shrink: 0;
     width: 100%;
-  }
-
-  .front-top-rim {
-    height: clamp(16px, 1.9vw, 24px);
-    position: relative;
-    background: linear-gradient(
-      180deg,
-      #c0c0c0 0%,
-      #909090 15%,
-      #686868 35%,
-      #444    60%,
-      #2a2a2a 80%,
-      #1a1a1a 100%
-    );
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  }
-  .front-top-rim::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 10%;
-    width: 40%;
-    height: 7px;
-    background: rgba(255, 255, 255, 0.45);
+    height: calc(var(--ry) * 2);
+    margin-bottom: calc(var(--ry) * -1);
     border-radius: 50%;
-    pointer-events: none;
-  }
-
-  .front-bottom-rim {
-    height: clamp(13px, 1.5vw, 18px);
-    margin-top: 0;
-    position: relative;
-    background: linear-gradient(
-      180deg,
-      #c0c0c0 0%,
-      #909090 15%,
-      #686868 35%,
-      #444    60%,
-      #2a2a2a 80%,
-      #1a1a1a 100%
-    );
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  }
-  .front-bottom-rim::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 10%;
-    width: 40%;
-    height: 7px;
-    background: rgba(255, 255, 255, 0.45);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-
-  .back-top-rim {
-    height: clamp(13px, 1.6vw, 20px);
-    position: relative;
-    background: linear-gradient(
-      180deg,
-      #c0c0c0 0%,
-      #909090 15%,
-      #686868 35%,
-      #444    60%,
-      #2a2a2a 80%,
-      #1a1a1a 100%
-    );
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  }
-  .back-top-rim::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 10%;
-    width: 40%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-
-  .back-bottom-rim {
-    height: clamp(10px, 1.2vw, 15px);
-    position: relative;
-    background: linear-gradient(
-      180deg,
-      #c0c0c0 0%,
-      #909090 15%,
-      #686868 35%,
-      #444    60%,
-      #2a2a2a 80%,
-      #1a1a1a 100%
-    );
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  }
-  .back-bottom-rim::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 10%;
-    width: 40%;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.38);
-    border-radius: 50%;
-    pointer-events: none;
+    background:
+      radial-gradient(
+        ellipse 64% 52% at 50% 50%,
+        #161616 0,
+        #262626 62%,
+        #5a5a5a 78%,
+        transparent 80%
+      ),
+      linear-gradient(
+        90deg,
+        #5c5c5c 0%,
+        #d8d8d8 22%,
+        #f2f2f2 34%,
+        #a8a8a8 60%,
+        #6a6a6a 85%,
+        #444 100%
+      );
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.55),
+      0 2px 6px rgba(0, 0, 0, 0.85);
   }
 
   /* ── Can body ────────────────────────────────────────────────────── */
@@ -303,87 +241,123 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
     position: relative;
     overflow: hidden;
     will-change: transform;
+    border-radius: 0 0 50% 50% / 0 0 var(--ry) var(--ry);
+  }
+  /* shadow cast by the lid onto the shoulder */
+  .can-body::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: calc(var(--ry) * 3);
+    background: linear-gradient(rgba(0, 0, 0, 0.6), transparent);
+    z-index: 2;
+    pointer-events: none;
   }
 
   .front-body {
     /*
      * Width and height both use min(vw, vh) so the can aspect ratio (~2.55:1)
-     * is preserved on short-screen laptops — when 70vh caps the height,
-     * 27.5vh (= 70vh ÷ 2.55) caps the width by the same proportion.
-     * At 1080p+: both vh values exceed the clamp max, so max governs.
-     * At 1280×800: 70vh=560px, 27.5vh=220px → ratio 560/220 = 2.55 ✓
+     * is preserved on short-screen laptops.
      */
     width: clamp(180px, min(22vw, 27.5vh), 280px);
     height: clamp(300px, min(55.8vw, 70vh), 714px);
     background:
       linear-gradient(
         to right,
-        rgba(0, 0, 0, 0.50)   0%,
-        rgba(0, 0, 0, 0.20)   10%,
-        rgba(255, 255, 255, 0.10) 16%,
+        rgba(0, 0, 0, 0.5) 0%,
+        rgba(0, 0, 0, 0.2) 10%,
+        rgba(255, 255, 255, 0.12) 16%,
         rgba(255, 255, 255, 0.04) 26%,
-        transparent           38%,
-        transparent           68%,
-        rgba(0, 0, 0, 0.28)   82%,
-        rgba(0, 0, 0, 0.58)  100%
+        transparent 38%,
+        transparent 68%,
+        rgba(0, 0, 0, 0.28) 82%,
+        rgba(0, 0, 0, 0.58) 100%
       ),
-      linear-gradient(
-        to right,
-        #0e0e0e  0%,
-        #1f1f1f 20%,
-        #1c1c1c 50%,
-        #141414 80%,
-        #080808 100%
-      );
-    box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.03),
-      0 24px 72px rgba(0, 0, 0, 0.85);
+      linear-gradient(to right, #0e0e0e 0%, #1f1f1f 20%, #1c1c1c 50%, #141414 80%, #080808 100%);
+    box-shadow: 0 24px 72px rgba(0, 0, 0, 0.85);
   }
 
   .back-body {
-    /* Back can is 85% of front width; 23.4vh = 27.5vh × 0.85 */
     width: clamp(153px, min(18.7vw, 23.4vh), 238px);
     height: clamp(260px, min(52vw, 68vh), 664px);
     background:
       linear-gradient(
         to right,
-        rgba(0, 0, 0, 0.45)   0%,
-        rgba(255, 255, 255, 0.07) 15%,
+        rgba(0, 0, 0, 0.45) 0%,
+        rgba(255, 255, 255, 0.08) 15%,
         rgba(255, 255, 255, 0.03) 26%,
-        transparent           38%,
-        transparent           70%,
-        rgba(0, 0, 0, 0.38)   88%,
-        rgba(0, 0, 0, 0.62)  100%
+        transparent 38%,
+        transparent 70%,
+        rgba(0, 0, 0, 0.38) 88%,
+        rgba(0, 0, 0, 0.62) 100%
       ),
+      linear-gradient(to right, #0a0a0a 0%, #181818 22%, #151515 50%, #0e0e0e 80%, #060606 100%);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75);
+  }
+
+  /* ── Bottom: green band + silver base, both wrapping the curve ───── */
+  .can-strip,
+  .can-base {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    -webkit-mask-image: radial-gradient(
+      ellipse 50% var(--ry) at 50% 0,
+      transparent calc(100% - 1px),
+      #000 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 50% var(--ry) at 50% 0,
+      transparent calc(100% - 1px),
+      #000 100%
+    );
+  }
+  .can-strip {
+    height: calc(var(--band) + var(--b) + var(--ry));
+    background:
       linear-gradient(
         to right,
-        #0a0a0a  0%,
-        #181818 22%,
-        #151515 50%,
-        #0e0e0e 80%,
-        #060606 100%
-      );
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75);
+        rgba(0, 0, 0, 0.5) 0%,
+        rgba(255, 255, 255, 0.18) 16%,
+        transparent 34%,
+        transparent 68%,
+        rgba(0, 0, 0, 0.55) 100%
+      ),
+      linear-gradient(180deg, #00ff44 0%, #00dc32 45%, #009922 100%);
+  }
+  .can-base {
+    height: calc(var(--b) + var(--ry));
+    background: linear-gradient(
+      to right,
+      #4a4a4a 0%,
+      #cfcfcf 20%,
+      #f0f0f0 32%,
+      #9a9a9a 58%,
+      #5e5e5e 85%,
+      #3a3a3a 100%
+    );
   }
 
   /* ── Front can label content ─────────────────────────────────────── */
   .can-banner {
     width: 100%;
-    padding: 8px 0;
+    padding: calc(var(--ry) + 8px) 0 calc(var(--ry) * 0.7 + 6px);
     background: rgba(0, 0, 0, 0.72);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0 0 50% 50% / 0 0 var(--ry) var(--ry);
     font-family: "MonsterFont", "VCRosdNEUE", sans-serif;
-    /* Scale with can width: 1.7vh = 1.4vw × (27.5/22) × 0.97 */
-    font-size: clamp(8px, min(1.4vw, 1.7vh), 15px);
-    letter-spacing: 0.2em;
+    font-size: clamp(11px, min(1.75vw, 2.15vh), 18px);
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 255, 255, 0.9);
     text-align: center;
     font-variant: small-caps;
     white-space: nowrap;
     flex-shrink: 0;
     position: relative;
-    z-index: 2;
+    z-index: 1;
   }
 
   .can-m-zone {
@@ -395,7 +369,7 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
     padding: clamp(10px, 1.3vw, 20px) clamp(14px, 1.8vw, 24px);
     min-height: 0;
     position: relative;
-    z-index: 2;
+    z-index: 1;
   }
 
   .can-m {
@@ -406,9 +380,8 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
 
   .can-brand {
     font-family: "MonsterFont", "VCRosdNEUE", sans-serif;
-    /* Scale with can width: 2.2vh = 2vw × (27.5/22) × 0.88 — conservative to prevent clip */
-    font-size: clamp(10px, min(1.8vw, 2.2vh), 24px);
-    letter-spacing: 0.18em;
+    font-size: clamp(12px, min(2.05vw, 2.5vh), 26px);
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: #fff;
     text-align: center;
@@ -419,67 +392,52 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
     overflow: hidden;
     flex-shrink: 0;
     position: relative;
-    z-index: 2;
+    z-index: 1;
   }
 
   .can-person {
     font-family: "Barlow Condensed", sans-serif;
     font-style: normal;
     font-weight: 700;
-    /* Scale with can width: 1.8vh = 1.5vw × 1.25 × 0.96 */
-    font-size: clamp(10px, min(1.4vw, 1.8vh), 17px);
+    font-size: clamp(13px, min(2vw, 2.5vh), 26px);
     color: #00dc32;
     text-align: center;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     white-space: nowrap;
-    padding-bottom: clamp(6px, 0.7vw, 10px);
+    /* clear the green band */
+    padding-bottom: calc(var(--band) + var(--b) + var(--ry) + clamp(6px, 0.7vw, 10px));
     text-shadow: 0 0 10px rgba(0, 220, 50, 0.65);
     flex-shrink: 0;
     position: relative;
-    z-index: 2;
+    z-index: 1;
   }
 
-  .can-strip {
-    width: 100%;
-    height: clamp(10px, 1.1vw, 14px);
-    background: linear-gradient(180deg,
-      #00ff44 0%,
-      #00DC32 40%,
-      #009922 70%,
-      #006614 100%
-    );
-    flex-shrink: 0;
-    box-shadow: 0 0 12px rgba(0, 220, 50, 0.6), inset 0 1px 0 rgba(255,255,255,0.3);
-    border-radius: 0 0 4px 4px;
-    margin: 0;
-  }
-
-  /* ── Back can — nutrition label ──────────────────────────────────── */
+  /* ── Back can: "currently" label ─────────────────────────────────── */
   .nutrition {
-    padding: clamp(5px, 0.6vw, 8px) clamp(5px, 0.55vw, 8px);
+    padding: calc(var(--ry) + 10px) clamp(8px, 0.9vw, 12px) 0
+      calc(var(--overlap) + clamp(8px, 0.9vw, 12px));
     background: transparent;
     color: rgba(255, 255, 255, 0.88);
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 3px;
     box-sizing: border-box;
     overflow: hidden;
     position: relative;
-    z-index: 2;
+    z-index: 1;
   }
 
   .nutr-head {
     font-family: "MonsterFont", sans-serif;
-    font-size: clamp(9px, min(1.1vw, 1.37vh), 13px);
-    font-weight: 900;
-    letter-spacing: 0.03em;
+    font-size: clamp(13px, min(1.9vw, 2.3vh), 22px);
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: #fff;
     line-height: 1;
-    padding-bottom: 3px;
+    padding-bottom: 5px;
     flex-shrink: 0;
   }
 
@@ -494,76 +452,26 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
     background: rgba(255, 255, 255, 0.4);
   }
   .nutr-rule.thin {
-    height: 1px;
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .nutr-serving {
-    font-family: "Share Tech Mono", monospace;
-    font-size: clamp(6px, min(0.75vw, 0.93vh), 9px);
-    color: rgba(255, 255, 255, 0.4);
-    padding: 1px 0;
-    white-space: normal;
-    word-break: break-word;
-    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.12);
   }
 
   .nutr-row {
     font-family: "Share Tech Mono", monospace;
-    font-size: clamp(7px, min(0.95vw, 1.18vh), 11px);
+    font-size: clamp(11px, min(1.4vw, 1.75vh), 17px);
     color: rgba(255, 255, 255, 0.82);
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: baseline;
-    padding: 1px 0;
-    gap: 4px;
-    white-space: nowrap;
+    padding: 4px 0;
+    gap: 2px 8px;
     flex-shrink: 0;
   }
-  .nutr-row span {
-    white-space: nowrap;
-  }
-  .nutr-row.bold {
-    font-size: clamp(8px, min(1.05vw, 1.31vh), 12px);
-    font-weight: 900;
-    color: #fff;
-  }
-  .nutr-row.nutr-warn {
-    color: #ff5555;
-  }
-
-  .nutr-row.nutr-wrap {
-    flex-wrap: wrap;
-    white-space: normal;
-  }
-  .nutr-row.nutr-wrap span {
-    white-space: normal;
-  }
   .nutr-val {
+    margin-left: auto;
     text-align: right;
     color: #fff;
-    margin-left: auto;
-  }
-
-  .hero-handle {
-    font-family: "MonsterFont", "VCRosdNEUE", sans-serif;
-    font-size: clamp(1rem, 2vw, 1.75rem);
-    color: #00dc32;
-    text-shadow: 0 0 8px rgba(0, 220, 50, 0.45);
-    letter-spacing: 0.1em;
-    text-align: center;
-    margin: 0;
-  }
-
-  .nutr-hl {
-    font-size: clamp(8px, min(1.05vw, 1.31vh), 12px);
-    font-weight: 900;
-    color: #fff;
-  }
-
-  .nutr-check {
-    color: #00dc32;
-    font-weight: bold;
+    font-weight: 700;
   }
 
   /* ── Glow pool beneath each can ──────────────────────────────────── */
@@ -641,6 +549,16 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
   .hero-title {
     font-size: clamp(1.5rem, 4vw, 4.5rem);
     text-align: center;
+  }
+
+  .hero-handle {
+    font-family: "MonsterFont", "VCRosdNEUE", sans-serif;
+    font-size: clamp(1rem, 2vw, 1.75rem);
+    color: #00dc32;
+    text-shadow: 0 0 8px rgba(0, 220, 50, 0.45);
+    letter-spacing: 0.1em;
+    text-align: center;
+    margin: 0;
   }
 
   .panel-line {
