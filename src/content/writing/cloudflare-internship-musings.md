@@ -48,7 +48,7 @@ Also, and I don't see this said enough: IR is _fun._ We see weird, wacky, someti
 ## part 3: the other 30% - i become bob the builder for security (and fail?)
 While I spent roughly 70% of my time on daily security operations, the other 30% went to a side project I'll call **Overwatch**. It aimed to tackle a problem you'll hear about at almost every security conference: that threat hunting across the industry tends to be more reactive, and a workflow that's able to semi-accurately turn raw threat intel into queries ready for hunting in your enterprise environment is a chronic pain point most teams are trying to solve. 
 
-The initial pitch was simple: automate the boring middle bit, digest raw intel, output hunt-ready queries. Unfortauntely, what ended up happening is a case study of the most common pitfalls of an internal project:
+The initial pitch was simple: automate the boring middle bit, digest raw intel, output hunt-ready queries. Unfortunately, what ended up happening is a case study of the most common pitfalls of an internal project:
 
 1. **Scope creep:** The proof of concept evolved in multiple directions, different flavours, cool "add-on features", as I kept finding adjacent problems that seemed easy to tack on. While each addition was individually justifiable, the result was a Frankenstein of a project that was 3x its intended size.
 2. **Building for me, not for adoption:** I was so focused on the building that I under-invested in the thing that actually determines whether an internal tool lives or dies: does anyone want to use it? Getting an engineer to change their workflow is infinitely harder than shipping code.
