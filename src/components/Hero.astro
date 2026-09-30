@@ -82,7 +82,7 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
               {currently.map((item) => (
                 <>
                   <div class="nutr-row nutr-wrap">
-                    <span>{item.label}</span><span class="nutr-val">{item.value}</span>
+                    <span class="nutr-label">{item.label}</span><span class="nutr-val" title={item.value}>{item.value}</span>
                   </div>
                   <div class="nutr-rule thin"></div>
                 </>
@@ -278,7 +278,7 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
   }
 
   .back-body {
-    width: clamp(153px, min(18.7vw, 23.4vh), 238px);
+    width: clamp(200px, min(26vw, 33vh), 330px);
     height: clamp(260px, min(52vw, 68vh), 664px);
     background:
       linear-gradient(
@@ -415,8 +415,7 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
 
   /* ── Back can: "currently" label ─────────────────────────────────── */
   .nutrition {
-    padding: calc(var(--ry) + 10px) clamp(8px, 0.9vw, 12px) 0
-      calc(var(--overlap) + clamp(8px, 0.9vw, 12px));
+    padding: calc(var(--ry) + 10px) 8px 0 calc(var(--overlap) + 4px);
     background: transparent;
     color: rgba(255, 255, 255, 0.88);
     width: 100%;
@@ -457,19 +456,27 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
 
   .nutr-row {
     font-family: "Share Tech Mono", monospace;
-    font-size: clamp(11px, min(1.4vw, 1.75vh), 17px);
+    font-size: clamp(10px, min(1.25vw, 1.55vh), 15px);
     color: rgba(255, 255, 255, 0.82);
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-between;
     align-items: baseline;
     padding: 4px 0;
-    gap: 2px 8px;
+    gap: 6px;
     flex-shrink: 0;
   }
+  .nutr-label {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
   .nutr-val {
+    min-width: 0;
     margin-left: auto;
     text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: #fff;
     font-weight: 700;
   }
@@ -536,24 +543,24 @@ const currently = (await getEntry("site", "currently"))?.data.items ?? [];
   /* ── About me blurb ──────────────────────────────────────────────── */
   .hero-about {
     font-family: "Share Tech Mono", monospace;
-    font-size: clamp(10px, 1.1vw, 16px);
+    font-size: clamp(12px, 1.35vw, 20px);
     color: rgba(255, 255, 255, 0.80);
     text-align: center;
     line-height: 1.75;
     margin: 0;
-    max-width: 50ch;
+    max-width: 52ch;
     word-break: break-word;
   }
 
   /* ── Hero title — fluid type, never forces horizontal scroll ─────── */
   .hero-title {
-    font-size: clamp(1.5rem, 4vw, 4.5rem);
+    font-size: clamp(1.75rem, 5vw, 6rem);
     text-align: center;
   }
 
   .hero-handle {
     font-family: "MonsterFont", "VCRosdNEUE", sans-serif;
-    font-size: clamp(1rem, 2vw, 1.75rem);
+    font-size: clamp(1.1rem, 2.5vw, 2.25rem);
     color: #00dc32;
     text-shadow: 0 0 8px rgba(0, 220, 50, 0.45);
     letter-spacing: 0.1em;
