@@ -8,8 +8,8 @@ slides_url: "/blog-assets/bsides-tokyo-2026.pdf"
 video_url: ""
 abstract: |
   Cheating in modern competitive games isn't a gameplay problem. It's a digital forensics problem. Using popular multiplayer titles in Asia (League of Legends, Valorant, Apex Legends), this talk examines how cheats behave like malware implants and leave persistent forensic artefacts across memory, disk, and telemetry.
-
-  This isn't a talk about writing cheats. It's about what they leave behind. We walk through three real cheat samples, reconstruct each incident from prefetch, amcache, Sysmon logs, and memory artefacts, and show where that reconstruction breaks down, as DMA cheats leave nothing on the target machine. The through line is that anti-cheat and EDR are solving the same problem with the same tools, and both are being pushed toward behavioural detection for the same reason.
+  
+  We walk through three real cheat samples, reconstruct each incident from prefetch, amcache, Sysmon logs, and memory artefacts, and show where that reconstruction breaks down, as DMA cheats leave nothing on the target machine. TLDR: Anti-cheat and EDR are solving the same problem with the same tools, and both are being pushed toward behavioural detection for the same reason.
 draft: false
 ---
 
