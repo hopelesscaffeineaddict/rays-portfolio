@@ -1,7 +1,7 @@
 ---
 import FormattedDate from "@/components/Date.astro";
 import Layout from "@/layouts/Layout.astro";
-import type { Post } from "@/lib/writing";
+import { realLink, type Post } from "@/lib/writing";
 
 interface Props {
   data: Post["data"];
@@ -14,7 +14,9 @@ interface Props {
   readMinutes?: number;
 }
 const { data, prev, next, showAbstract = false, readMinutes } = Astro.props;
-const { title, date, updatedDate, category, tags, venue, slides_url, video_url, abstract } = data;
+const { title, date, updatedDate, category, tags, venue, abstract } = data;
+const slides_url = realLink(data.slides_url);
+const video_url = realLink(data.video_url);
 ---
 
 <Layout title={title} description={data.description}>
@@ -67,7 +69,7 @@ const { title, date, updatedDate, category, tags, venue, slides_url, video_url, 
           {category === "talks" && (
             <ul class="bp-talk-meta">
               {venue && <li>venue: {venue}</li>}
-              {slides_url && <li><a href={slides_url} download target="_blank" rel="noopener noreferrer">slides (pdf)</a></li>}
+              {slides_url && <li><a href={slides_url} target="_blank" rel="noopener noreferrer">slides (pdf)</a></li>}
               {video_url && <li><a href={video_url} target="_blank" rel="noopener noreferrer">video</a></li>}
             </ul>
           )}

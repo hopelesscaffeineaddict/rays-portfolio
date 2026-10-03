@@ -1,6 +1,6 @@
 ---
 import FormattedDate from "@/components/Date.astro";
-import type { Post } from "@/lib/writing";
+import { realLink, type Post } from "@/lib/writing";
 
 interface Props {
   post: Post;
@@ -8,11 +8,14 @@ interface Props {
 
 const { post } = Astro.props;
 const { title, date, category, description, thumbnail, venue } = post.data;
+const isTalk = category === "talks";
+const slides = realLink(post.data.slides_url);
+const video = realLink(post.data.video_url);
 ---
 
-<a
-  href={`/writing/${post.id}`}
-  class="group flex gap-4 items-stretch w-full bg-monster/5 backdrop-blur-sm border border-monster/25 rounded-lg p-4 transition-all duration-200 ease-in-out hover:border-monster/70 hover:shadow-monster-sm"
+<!-- Card is a div with a stretched title link so the slides/video buttons can be real links (no nested <a>). -->
+<div
+  class="group relative flex gap-4 items-stretch w-full bg-monster/5 backdrop-blur-sm border border-monster/25 rounded-lg p-4 transition-all duration-200 ease-in-out hover:border-monster/70 hover:shadow-monster-sm"
 >
   {
     thumbnail && (
@@ -27,7 +30,12 @@ const { title, date, category, description, thumbnail, venue } = post.data;
   <div class="min-w-0 flex-1 font-mono tracking-wider">
     <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mb-1">
       <h3 class="text-lg text-white uppercase tracking-widest">
-        <span class="text-monster mr-2">❯</span>{title}
+        <a
+          href={`/writing/${post.id}`}
+          class="after:absolute after:inset-0 after:content-['']"
+        >
+          <span class="text-monster mr-2">❯</span>{title}
+        </a>
       </h3>
       <div class="flex flex-wrap items-center gap-2">
         <span
@@ -47,5 +55,31 @@ const { title, date, category, description, thumbnail, venue } = post.data;
       [<FormattedDate date={date} />]
     </p>
     <p class="text-white/60 text-sm">{description}</p>
+    {
+      isTalk && (slides || video) && (
+        <div class="relative z-10 flex flex-wrap gap-2 mt-3">
+          {slides && (
+            <a
+              href={slides}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-3 py-1 border border-monster/50 text-monster text-xs uppercase tracking-widest rounded-sm transition-colors hover:bg-monster hover:text-monster-dark"
+            >
+              Slides
+            </a>
+          )}
+          {video && (
+            <a
+              href={video}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-3 py-1 border border-monster/50 text-monster text-xs uppercase tracking-widest rounded-sm transition-colors hover:bg-monster hover:text-monster-dark"
+            >
+              Video
+            </a>
+          )}
+        </div>
+      )
+    }
   </div>
-</a>
+</div>
