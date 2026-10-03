@@ -65,6 +65,24 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image, Astro.url)} />
 
+<meta property="og:site_name" content={SITE_TITLE} />
+
+<!-- Site name for Google search results (homepage only) -->
+{
+  Astro.url.pathname === "/" && (
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: SITE_TITLE,
+        alternateName: ["Ray Goh", "hopelesscaffeineaddict"],
+        url: new URL("/", Astro.site).href,
+      })}
+    />
+  )
+}
+
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />

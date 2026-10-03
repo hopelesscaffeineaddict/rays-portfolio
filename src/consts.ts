@@ -7,11 +7,11 @@ export const SITE_DESCRIPTION =
 
 // Landing page copy. Edit here.
 export const INTRO =
-  "hey, i'm ray! i'm an incident responder in singapore, nerding out on EDRs, anticheats, and the space between them. this site is where i think out loud, drop the occasional deep dive, and keep track of what i'm figuring out along the way.";
+  "hey, i'm ray! i'm an incident responder in singapore who likes digging into how EDRs and anticheats work (they're more similar than you'd think!). this site is where i think out loud and keep track of what i'm figuring out along the way.";
 
 // About page copy.
 export const BIO =
-  "i'm ray, an incident responder based in singapore. i spend my time on windows endpoint internals, EDRs, and the seam between malware and anticheats. i speak at conferences when they let me, and write things down here so i remember what i figured out.";
+  "i'm ray, an incident responder based in singapore. i spend my time on windows endpoint internals, EDRs, and anticheats. i speak at conferences when they let me, and write things down here so i remember what i figured out.";
 
 export const GITHUB_USERNAME = "hopelesscaffeineaddict";
 export const LINKEDIN_URL = "https://www.linkedin.com/in/ray-goh-l33t/";
