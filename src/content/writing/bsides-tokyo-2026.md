@@ -25,7 +25,7 @@ We walk through three real cheat samples, reconstruct each incident from prefetc
 
 ## Recording
 
-N/A. This talk wasn't recorded.
+N/A (Talk was not recorded)
 
 ## Key Points
 
