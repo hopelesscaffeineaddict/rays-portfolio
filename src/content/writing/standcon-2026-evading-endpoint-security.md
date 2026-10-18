@@ -4,7 +4,7 @@ date: 2026-10-17
 category: talks
 description: "Briefly covered how EDRs operate on Windows endpoints and why attackers would consider evading one. I then dove into popular evasion techniques with cool case studies of their abuse in the wild, and finally walked through an incident responder's workflow when there's an incident involving an impaired EDR.
 "
-presented at: "STANDCON 2026"
+presented_at: "STANDCON 2026"
 slides_url: "/blog-assets/STANDCON%202026_Evading%20Endpoint%20Security_Ray%20Goh.pdf"
 video_url: ""
 abstract: |
